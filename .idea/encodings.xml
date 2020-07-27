@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/baseservice" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/marketdata" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strategy" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/trade" charset="UTF-8" />
+  </component>
+</project>

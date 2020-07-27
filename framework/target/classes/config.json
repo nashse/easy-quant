@@ -1,0 +1,13 @@
+{
+  "configs" : [
+    {
+      "id" : "1",
+      "exchangeName" : "deribit",
+      "symbol" : "BTC-PERPETUAL",
+      "mdE" : { "exchangeName" : "deribit" },
+      "tradeE" : { "exchangeName" : "deribit", "accessKey" : "accessKey/12312", "secretKey" : "secretKey" },
+      "huobiproE" : { "exchangeName" : "huobipro" },
+      "profit" : "12"
+    }
+  ]
+}
