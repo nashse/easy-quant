@@ -31,7 +31,7 @@ public class OkHttpV3Client {
                 if (okHttpClient == null) {
                     okHttpClient = new OkHttpClient.Builder()
                             //todo 代理，注意上线打包关闭
-                            .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 7890)))
+//                            .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 7890)))
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .writeTimeout(30, TimeUnit.SECONDS)

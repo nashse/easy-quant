@@ -72,7 +72,7 @@ public class HttpUtil {
 		//cookieStore.addCookie(cookie);
 		HttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore)
 				//todo 代理，注意上线打包关闭
-				.setProxy(new HttpHost("127.0.0.1", 7890))
+//				.setProxy(new HttpHost("127.0.0.1", 7890))
 				.build();
 		HttpPost post = new HttpPost(url);
 		String body = null;

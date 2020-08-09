@@ -1,113 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="511feb34-5bda-445e-9075-5750d0c3be00" name="Default Changelist" comment="1.接口okex。&#10;2.优化结构。&#10;3.实现okex usdt本位合约网格策略。">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/IMdExchange.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/ITradeExchange.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/future/BaseHuobiProFutExchange.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/huobipro/HuobiProFutUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/okex/OkexFutUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/model/Position.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/model/enums/Offset.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/model/enums/SecuritiesTypeEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/util/MathUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/util/RepeatUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/service/IEmailService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/service/impl/EmailServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/util/FileUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/http/future/OkexMdFutExchange.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/strategy/src/main/java/com/zyf/strategy/GridStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/strategy/src/main/java/com/zyf/strategy/OkexGridStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/strategy/src/main/resources/grid.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/strategy/src/main/resources/store.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/future/HuobiProTradeFutExchange.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/future/OkexTradeFutExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="511feb34-5bda-445e-9075-5750d0c3be00" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/IExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/IExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/BaseDeribitExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/stock/BaseDeribitExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/BaseHuobiProExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/stock/BaseHuobiProExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/BaseOkexExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/stock/BaseOkexExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/future/IFutureExchange.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/option/IOptionExchange.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/trade/IFutureTradeExchange.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/trade/IOptionTradeExchange.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/deribit/DeribitTradeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/deribit/DeribitTradeUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/huobipro/HuobiProSignUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/huobipro/HuobiProSignUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/huobipro/HuobiProUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/huobipro/HuobiProUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/okex/OkexSignUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/okex/OkexSignUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/okex/OkexUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/util/okex/OkexUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/IExchange.class" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/IExchange.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/baseexchange/BaseDeribitExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/baseexchange/BaseHuobiProExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/baseexchange/BaseOkexExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/baseexchange/future/IFutureExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/baseexchange/option/IOptionExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/baseexchange/trade/IFutureTradeExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/baseexchange/trade/IOptionTradeExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/util/deribit/DeribitTradeUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/util/deribit/DeribitTradeUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/util/okex/OkexSignUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/util/okex/OkexSignUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/util/okex/OkexUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/baseservice/target/classes/com/zyf/baseservice/util/okex/OkexUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/exceptions/ExchangeHttpApiException.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/exceptions/ExchangeHttpApiException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/future/BaseHuobiProFutExchange.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/stock/BaseDeribitExchange.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/stock/BaseHuobiProExchange.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/baseservice/src/main/java/com/zyf/baseservice/baseexchange/stock/BaseOkexExchange.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/http/HttpUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/http/HttpUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/model/Depth.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/model/Depth.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/model/enums/Side.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/model/enums/Side.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/okhttp/OkHttpV3Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/okhttp/OkHttpV3Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/util/FrameworkUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/util/CommomUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/util/YamlUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/com/zyf/common/util/YamlUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/src/main/resources/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/resources/log4j.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/com/zyf/common/exceptions/ExchangeHttpApiException.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/com/zyf/common/exceptions/ExchangeHttpApiException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/com/zyf/common/http/HttpUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/com/zyf/common/http/HttpUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/com/zyf/common/model/enums/Side.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/com/zyf/common/model/enums/Side.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/com/zyf/common/okhttp/OkHttpV3Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/com/zyf/common/okhttp/OkHttpV3Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/com/zyf/common/util/FrameworkUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/log4j.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/framework/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/boot/ApplicationContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/boot/ApplicationContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/boot/BaseStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/boot/BaseStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/boot/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/boot/Environment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/util/StopWatch.java" beforeDir="false" afterPath="$PROJECT_DIR$/framework/src/main/java/com/zyf/framework/util/StopWatch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/src/main/resources/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/framework/src/main/resources/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/src/test/java/com/zyf/framework/Strategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/framework/src/test/java/com/zyf/framework/Strategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/boot/ApplicationContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/boot/ApplicationContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/boot/BaseStrategy.class" beforeDir="false" afterPath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/boot/BaseStrategy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/boot/Environment.class" beforeDir="false" afterPath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/boot/Environment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/util/StopWatch.class" beforeDir="false" afterPath="$PROJECT_DIR$/framework/target/classes/com/zyf/framework/util/StopWatch.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/target/classes/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/framework/target/classes/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/framework/target/test-classes/com/zyf/framework/Strategy.class" beforeDir="false" afterPath="$PROJECT_DIR$/framework/target/test-classes/com/zyf/framework/Strategy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/factory/MdExchangeFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/factory/MdExchangeFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/http/huobipro/HuobiProMdExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/http/stock/HuobiProMdExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/http/okex/OkexMdExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/http/stock/OkexMdExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/http/option/deribit/DeribitMdExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/http/option/deribit/DeribitMdExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/proxy/MdExchangeProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/src/main/java/com/zyf/marketdata/proxy/MdExchangeProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/factory/MdExchangeFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/factory/MdExchangeFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/http/huobipro/HuobiProMdExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/http/okex/OkexMdExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/http/option/deribit/DeribitMdExchange.class" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/http/option/deribit/DeribitMdExchange.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/proxy/MdExchangeProxy.class" beforeDir="false" afterPath="$PROJECT_DIR$/marketdata/target/classes/com/zyf/marketdata/proxy/MdExchangeProxy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/src/main/java/com/zyf/strategy/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/src/main/java/com/zyf/strategy/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/src/main/java/com/zyf/strategy/Strategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/src/main/java/com/zyf/strategy/Strategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/src/main/resources/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/src/main/resources/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/target/classes/com/zyf/strategy/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/target/classes/com/zyf/strategy/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/target/classes/com/zyf/strategy/Strategy.class" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/target/classes/com/zyf/strategy/Strategy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/target/classes/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/target/classes/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/factory/TradeExchangeFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/factory/TradeExchangeFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/deribit/DeribitTradeExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/stock/DeribitTradeExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/huobipro/HuobiProTradeExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/stock/HuobiProTradeExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/okex/OkexTradeExchange.java" beforeDir="false" afterPath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/http/stock/OkexTradeExchange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/proxy/TradeExchangeProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/trade/src/main/java/com/zyf/trade/proxy/TradeExchangeProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/factory/TradeExchangeFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/factory/TradeExchangeFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/http/deribit/DeribitTradeExchange$BuySellType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/http/deribit/DeribitTradeExchange$OrderType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/http/deribit/DeribitTradeExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/http/huobipro/HuobiProTradeExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/http/okex/OkexTradeExchange.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/proxy/TradeExchangeProxy.class" beforeDir="false" afterPath="$PROJECT_DIR$/trade/target/classes/com/zyf/trade/proxy/TradeExchangeProxy.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -309,8 +210,16 @@
       <workItem from="1596010079719" duration="9096000" />
       <workItem from="1596028753952" duration="207000" />
       <workItem from="1596029946947" duration="206449000" />
-      <workItem from="1596872428990" duration="16408000" />
+      <workItem from="1596872428990" duration="17137000" />
     </task>
+    <task id="LOCAL-00001" summary="1.接口okex。&#10;2.优化结构。&#10;3.实现okex usdt本位合约网格策略。">
+      <created>1596974233216</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1596974233216</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
