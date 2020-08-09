@@ -114,7 +114,7 @@ this.startUpScheduler();
 - 启动demo程序命令
 java -jar 包名.jar 策略包名 --config-name:配置名
 - 例子
-java -jar OkexGridStrategy-1.0-jar-with-dependencies.jar com.zyf.strategy.Strategy --config-name:grid.json
+java -jar strategy-1.0-jar-with-dependencies.jar com.zyf.strategy.Strategy --config-name:grid.json
 - 程序会输出deribit交易所的BTC-PERPETUAL合约的Detph数据（为什么demo用deribit交易所，因为不需要翻墙）
 
 ### 文件目录说明
