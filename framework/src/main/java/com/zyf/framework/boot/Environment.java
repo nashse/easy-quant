@@ -4,6 +4,7 @@ import cn.hutool.core.io.resource.ClassPathResource;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.zyf.framework.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -47,7 +48,7 @@ public class Environment {
         log.info("load default config");
 
         // 加载配置文件
-        String property = readJsonFile(name);
+        String property = FileUtil.readJsonFile(name);
         log.info(String.format("load file %s success.", name));
 
         JSONObject json;
@@ -63,33 +64,4 @@ public class Environment {
         return json;
     }
 
-    /**
-     * 读取json文件
-     * @param fileName 文件名
-     * @return
-     */
-    private static String readJsonFile(String fileName) {
-        String jsonStr = "";
-        try {
-            // ClassPathResource类的构造方法接收路径名称，自动去classpath路径下找文件
-            ClassPathResource classPathResource = new ClassPathResource(fileName);
-            File jsonFile = classPathResource.getFile();
-            FileReader fileReader = new FileReader(jsonFile);
-            Reader reader = new InputStreamReader(new FileInputStream(jsonFile),"utf-8");
-            int ch = 0;
-            StringBuffer sb = new StringBuffer();
-            while ((ch = reader.read()) != -1) {
-                sb.append((char) ch);
-            }
-            fileReader.close();
-            reader.close();
-            jsonStr = sb.toString();
-            return jsonStr;
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            String message = String.format("load file %s failed.", fileName);
-            throw new RuntimeException(message);
-        }
-    }
 }

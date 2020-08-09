@@ -99,7 +99,7 @@ public class YamlUtil {
      * @param clazz 类型
      * @param <T>
      * @return
-     * @throws Exception
+     * @throws FileNotFoundException, YamlException
      */
     public static <T> T yamlToBean(File file, Class<T> clazz) throws FileNotFoundException, YamlException {
         YamlReader reader = new YamlReader(new FileReader(file));
@@ -114,7 +114,7 @@ public class YamlUtil {
      * @param config 反序列化配置
      * @param <T>
      * @return
-     * @throws Exception
+     * @throws FileNotFoundException, YamlException
      */
     public static <T> T yamlToBean(File file, Class<T> clazz, YamlConfig config) throws FileNotFoundException, YamlException {
         YamlReader reader = new YamlReader(new FileReader(file), config);
@@ -141,7 +141,7 @@ public class YamlUtil {
      * @param file   YAML文件
      * @param bean   序列化对象
      * @param config 序列化配置
-     * @throws Exception
+     * @throws IOException
      */
     public static void beanToYaml(File file, Object bean, YamlConfig config) throws IOException {
         YamlWriter writer = new YamlWriter(new FileWriter(file), config);

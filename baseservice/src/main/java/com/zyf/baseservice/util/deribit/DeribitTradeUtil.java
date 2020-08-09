@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zyf.common.model.Balance;
 import com.zyf.common.model.InstrumentTrade;
 import com.zyf.common.model.Order;
+import com.zyf.common.model.Position;
 import com.zyf.common.model.enums.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -225,7 +226,7 @@ public class DeribitTradeUtil {
         return null;
     }
 
-    public static List<Order> parsePosition(JSONObject jo) {
+    public static List<Position> parsePosition(JSONObject jo) {
         return null;
     }
 

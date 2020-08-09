@@ -20,6 +20,16 @@ public class Strategy extends BaseStrategy {
     private MdExchangeProxy huobiproE;
 
     @Override
+    protected void recovery() {
+
+    }
+
+    @Override
+    protected void init() {
+
+    }
+
+    @Override
     @ScheduledByZyf(cron = "0/1 * * * * ?")
     //@ScheduledByZyf(initialDelay = 20000, fixedDelay = 2000)
     protected void run() {

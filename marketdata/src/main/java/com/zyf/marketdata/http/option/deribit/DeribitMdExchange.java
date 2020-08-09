@@ -2,15 +2,15 @@ package com.zyf.marketdata.http.option.deribit;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.zyf.baseservice.baseexchange.BaseDeribitExchange;
+import com.zyf.baseservice.IMdExchange;
 import com.zyf.baseservice.util.deribit.DeribitUtil;
 import com.zyf.common.model.Depth;
+import com.zyf.common.model.Kline;
 import com.zyf.common.model.Precision;
 import com.zyf.common.model.Ticker;
 import com.zyf.common.model.enums.ExchangeEnum;
 import com.zyf.common.model.future.Instrument;
 import com.zyf.common.okhttp.OkHttpV3ClientProxy;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +25,23 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2019/6/27 10:02
  */
 @Slf4j
-public class DeribitMdExchange extends BaseDeribitExchange {
+public class DeribitMdExchange implements IMdExchange {
+
     /**
      * 协议
      */
-    public static final String PROTOCOL = "https://";
+    private static final String PROTOCOL = "https://";
+
     /**
      * 网站
      */
-    public static final String SITE = "www.deribit.com";
+    private static final String SITE = "www.deribit.com";
+
     /**
      * URL
      */
-    public static final String URL = PROTOCOL + SITE;
+    private static final String URL = PROTOCOL + SITE;
+
     /**
      * ticker资源路径
      */
@@ -47,22 +51,21 @@ public class DeribitMdExchange extends BaseDeribitExchange {
      * depth资源路径
      */
     private static final String DEPTH = "/api/v2/public/get_order_book";
+
     /**
      * 精密度
      */
     private static final String PRECISION = "/api/v2/api/v1/instrument";
+
     /**
      * 合约
      */
     private static final String INSTRUMENTS = "/api/v2/public/get_instruments";
+
     /**
      * 币对
      */
     private static final String CURRENCIES = "/api/v2/public/get_currencies";
-    /**
-     * 交易所名字
-     */
-    private static final ExchangeEnum name = ExchangeEnum.DERIBIT;
 
     /**
      * 单例模式
@@ -98,6 +101,11 @@ public class DeribitMdExchange extends BaseDeribitExchange {
         /*适配*/
         JSONObject jo = JSONObject.parseObject(tickerStr);
         return DeribitUtil.parseTicker(jo);
+    }
+
+    @Override
+    public List<Kline> getKline(String symbol) {
+        return null;
     }
 
     /**

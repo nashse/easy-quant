@@ -1,6 +1,7 @@
 package com.zyf.common.exceptions;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Description:Exchange Http Api Exception
@@ -9,6 +10,7 @@ import lombok.Data;
  * @see RuntimeException
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class ExchangeHttpApiException extends RuntimeException {
 
     private static final long serialVersionUID = -7864604160297181941L;

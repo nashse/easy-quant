@@ -186,7 +186,7 @@ public class HuobiProSignUtil {
     /**
      * 将url参数转换成map
      *
-     * @param param aa=11&bb=22&cc=33
+     * @param param
      * @return
      */
     public static LinkedHashMap<String, String> getUrlParams(String param) {

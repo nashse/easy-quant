@@ -1,5 +1,6 @@
 package com.zyf.baseservice.util.okex;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zyf.common.model.*;
@@ -125,7 +126,7 @@ public class OkexUtil {
         lAvailable = l.getBigDecimal("available");
         lFrozen = l.getBigDecimal("frozen");
         rAvailable = r.getBigDecimal("available");
-        rFrozen = r.getBigDecimal("available");
+        rFrozen = r.getBigDecimal("frozen");
 
         return new Account(null, symbol,
                 new Balance(null, l.getString("currency"), lAvailable, lFrozen),
@@ -139,14 +140,7 @@ public class OkexUtil {
      * @param paramMap
      */
     public static String addParams(LinkedHashMap<String, Object> paramMap) {
-        String rtn = "{";
-        for (Map.Entry<String, Object> pair : paramMap.entrySet()){
-            String key = OkexSignUtil.urlEncoded(pair.getKey(), INPUT_CHARSET);
-            String value = OkexSignUtil.urlEncoded(pair.getValue().toString(), INPUT_CHARSET);
-            rtn += "'" + key + "'" + ":" + "'" + value + "'" + ",";
-        }
-        rtn = rtn.substring(0, rtn.length()-1)+ "}";
-        return rtn;
+        return JSON.toJSONString(paramMap);
     }
 
 

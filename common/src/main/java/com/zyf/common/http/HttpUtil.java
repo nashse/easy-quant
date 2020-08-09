@@ -1,6 +1,7 @@
 package com.zyf.common.http;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -71,7 +72,7 @@ public class HttpUtil {
 		//cookieStore.addCookie(cookie);
 		HttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore)
 				//todo 代理，注意上线打包关闭
-				//.setProxy(new HttpHost("127.0.0.1", 1080))
+				.setProxy(new HttpHost("127.0.0.1", 7890))
 				.build();
 		HttpPost post = new HttpPost(url);
 		String body = null;

@@ -10,12 +10,14 @@ import java.util.Map;
 
 /**
  * 交易所接口
+ *
  * @author yuanfeng.z
  * @date 2019/6/28 15:33
  */
 public interface IExchange {
     /**
      * 获取ticker
+     *
      * @param symbol 币对
      * @return
      */
@@ -23,6 +25,7 @@ public interface IExchange {
 
     /**
      * 获取kline
+     *
      * @param symbol 币对
      * @return
      */
@@ -30,6 +33,7 @@ public interface IExchange {
 
     /**
      * 获取深度
+     *
      * @param symbol 币对
      * @return
      */
@@ -37,12 +41,14 @@ public interface IExchange {
 
     /**
      * 获取精度
+     *
      * @return
      */
     Map<String, Precision> getPrecisions();
 
     /**
      * 获取账户信息
+     *
      * @param symbol
      * @return
      */
@@ -50,22 +56,25 @@ public interface IExchange {
 
     /**
      * 获取合约账户信息
+     *
      * @return
      */
     Asset getAsset();
 
     /**
      * 市价买入
+     *
      * @param symbol 币对
-     * @param cost 费用
+     * @param cost   费用
      * @return 订单id
      */
     String buyMarket(String symbol, BigDecimal cost);
 
     /**
      * 限价买入
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @return 订单id
      */
@@ -74,8 +83,9 @@ public interface IExchange {
 
     /**
      * 限价买入
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @param leverage 杠杆
      * @return 订单id
@@ -85,8 +95,9 @@ public interface IExchange {
 
     /**
      * 限价买入
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @param leverage 杠杆
      * @return 订单id
@@ -95,8 +106,9 @@ public interface IExchange {
 
     /**
      * 买入止损单
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @return 订单id
      */
@@ -104,7 +116,8 @@ public interface IExchange {
 
     /**
      * 市价卖出
-     * @param symbol 币对
+     *
+     * @param symbol   币对
      * @param quantity 卖出数量
      * @return 订单id
      */
@@ -112,8 +125,9 @@ public interface IExchange {
 
     /**
      * 限价卖出
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @return 订单id
      */
@@ -121,8 +135,9 @@ public interface IExchange {
 
     /**
      * 限价卖出
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @param leverage 杠杆
      * @return 订单id
@@ -132,8 +147,9 @@ public interface IExchange {
 
     /**
      * 限价卖出
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @param leverage 杠杆
      * @return 订单id
@@ -142,8 +158,9 @@ public interface IExchange {
 
     /**
      * 卖出止损单
-     * @param symbol 币对
-     * @param price 价格
+     *
+     * @param symbol   币对
+     * @param price    价格
      * @param quantity 数量
      * @return 订单id
      */
@@ -151,7 +168,8 @@ public interface IExchange {
 
     /**
      * 根据订单id撤单
-     * @param symbol 币对
+     *
+     * @param symbol  币对
      * @param orderId 订单id
      * @return
      */
@@ -159,21 +177,24 @@ public interface IExchange {
 
     /**
      * 批量撤单
+     *
      * @param symbol 币对
      * @param ids
      * @return
      */
-     Boolean cancelOrders(String symbol, List<String> ids);
+    Boolean cancelOrders(String symbol, List<String> ids);
 
     /**
      * 获取所有的订单
+     *
      * @param symbol 币对
      * @return 订单列表
      */
-     List<Order> getOrders(String symbol);
+    List<Order> getOrders(String symbol);
 
     /**
      * 获取所有的正在挂的订单
+     *
      * @param symbol 币对
      * @return 订单列表
      */
@@ -181,64 +202,142 @@ public interface IExchange {
 
     /**
      * 获取指定id的订单信息
-     * @param symbol 币对
+     *
+     * @param symbol  币对
      * @param orderId 订单id
      * @return 订单
      */
-     Order getOrder(String symbol, String orderId);
-
-     /**
-      * 获取成交明细
-      * @param symbol 币对
-      * @param orderId 订单id
-      * @return List<Trade>
-      */
-     List<Trade> getTrade(String symbol, String orderId);
+    Order getOrder(String symbol, String orderId);
 
     /**
-     * 获取合约成交明细
+     * 获取成交明细列表
+     *
+     * @param symbol  币对
+     * @param orderId 订单id
+     * @return
+     */
+    List<Trade> getTrade(String symbol, String orderId);
+
+    /*****************期货********************/
+
+    /**
+     * 开多：买入开多
+     *
+     * @param instrument 合约
+     * @param price      价格
+     * @param quantity   数量
+     * @param leverRate  杠杆
+     * @return
+     */
+    String openBuy(String instrument,
+                   BigDecimal price,
+                   BigDecimal quantity,
+                   Integer leverRate);
+
+    /**
+     * 开空：卖出开空
+     *
+     * @param instrument 合约
+     * @param price      价格
+     * @param quantity   数量
+     * @param leverRate  杠杆
+     * @return
+     */
+    String openSell(String instrument,
+                    BigDecimal price,
+                    BigDecimal quantity,
+                    Integer leverRate);
+
+    /**
+     * 平多：卖出平多
+     *
+     * @param instrument 合约
+     * @param price      价格
+     * @param quantity   数量
+     * @param leverRate  杠杆
+     * @return
+     */
+    String closeBuy(String instrument,
+                    BigDecimal price,
+                    BigDecimal quantity,
+                    Integer leverRate);
+
+    /**
+     * 平空：买入平空
+     *
+     * @param instrument 合约
+     * @param price      价格
+     * @param quantity   数量
+     * @param leverRate  杠杆
+     * @return
+     */
+    String closeSell(String instrument,
+                     BigDecimal price,
+                     BigDecimal quantity,
+                     Integer leverRate);
+
+    /**
+     * 获取合约成交明细列表
+     *
      * @param symbol 币对
-     * @return List<Trade>
+     * @return
      */
     List<InstrumentTrade> getInstrumentTrade(String symbol);
 
     /**
-     * 根据合约获取当前仓位持仓张数
-     * @param symbol 合约
-     * */
-     BigDecimal getContract(String symbol);
-
-    /**
-     * 根据合约获取未成交订单
-     * @param symbol 合约
-     * */
-     List<Order> get_unsettled_orders(String symbol);
-
-    /**
-     * 根据合约撤掉所有订单 ok
-     * */
-     Boolean cancelAll(String symbol);
-
-    /**
-     * 撤销交易所所有订单 ok
-     * */
-    Boolean cancelAll();
-
-    /**
-     * 合约批量下单
-     * */
-     Boolean placeOrders(String symbol, List<Order> orders, Integer leverage);
-
-    /**
-     * 平掉所有仓位
-     * @return
-     */
-     String closePosition(String symbol, Type type, BigDecimal price);
-
-    /**
      * 获取所有持仓
-     * @param symbol
+     *
+     * @param instrument 合约
      * @return
      */
-     List<Order> getPosition(String symbol);
+    List<Order> getPosition(String instrument);
+
+    /**
+     * 撤掉所有订单
+     *
+     * @param instrument 合约
+     * @return
+     */
+    Boolean cancelAll(String instrument);
+
+    /**
+     * 委托下单：平买
+     *
+     * @param instrument   合约
+     * @param triggerPrice 触发价，精度超过最小变动单位会报错
+     * @param quantity     委托数量(张)
+     * @return
+     */
+    String triggerCloseBuy(String instrument,
+                           BigDecimal triggerPrice,
+                           BigDecimal quantity);
+
+    /**
+     * 委托下单：平卖
+     *
+     * @param instrument   合约
+     * @param triggerPrice 触发价，精度超过最小变动单位会报错
+     * @param quantity     委托数量(张)
+     * @return
+     */
+    String triggerCloseSell(String instrument,
+                            BigDecimal triggerPrice,
+                            BigDecimal quantity);
+
+
+    /**
+     * 获取计划委托所有的正在挂的订单
+     *
+     * @param instrument
+     * @return
+     */
+    List<Order> getTriggerPendingOrders(String instrument);
+
+    /**
+     * 撤销所有计划委托订单
+     *
+     * @param instrument
+     * @return
+     */
+    Boolean triggerCancelAll(String instrument);
 }

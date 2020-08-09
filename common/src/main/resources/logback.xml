@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <!-- 日志级别从低到高：trace < debug < info < warn < error < fatal -->
+
+    <!-- 日志上下文名称-->
+    <contextName>logback</contextName>
+
+    <!-- 全局的日志级别，下面的所有配置只记录大于或等于此级别的日志信息（除了动态数据源） -->
+    <property name="log.level" value="info"/>
+
+    <!-- 日志文件的目录路径-->
+    <property name="log.path" value="/logs/"/>
+
+    <!--输出到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!--此日志Filter在开发环境才启用，只配置最低级别，控制台输出的日志级别是大于或等于此级别的日志信息 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${log.level}</level>
+        </filter>
+        <!-- 日志输出格式 -->
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36}.%M\(%line\) - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!--输出到文件-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径 -->
+        <file>${log.path}/${log.level}.log</file>
+        <!-- 日志输出格式 -->
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36}.%M\(%line\) - %msg%n
+            </pattern>
+        </encoder>
+        <!-- 控制日志文件只记录大于或等于此级别的日志信息 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${log.level}</level>
+        </filter>
+        <!-- 日志滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件保留天数-->
+            <maxHistory>30</maxHistory>
+            <!-- 日志归档 -->
+            <fileNamePattern>${log.path}/${log.level}/${log.level}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 指定最基础的日志输出级别 -->
+    <root level="${log.level}">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </root>
+
+    <!-- 将动态数据源的日志信息输出到控制台 -->
+    <appender name="dynamic_datasource_console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36}.%M\(%line\) - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 打印动态数据源的日志信息，开发环境才启用 -->
+    <logger name="com.baomidou.dynamic" level="debug" additivity="false">
+        <appender-ref ref="dynamic_datasource_console"/>
+    </logger>
+
+</configuration>

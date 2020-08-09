@@ -1,6 +1,6 @@
 package com.zyf.framework.util;
 
-import com.sun.istack.internal.Nullable;
+//import com.sun.istack.internal.Nullable;
 
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -11,9 +11,9 @@ public class StopWatch {
     private boolean keepTaskList;
     private final List<TaskInfo> taskList;
     private long startTimeMillis;
-    @Nullable
+//    @Nullable
     private String currentTaskName;
-    @Nullable
+//    @Nullable
     private StopWatch.TaskInfo lastTaskInfo;
     private int taskCount;
     private long totalTimeMillis;
@@ -69,7 +69,7 @@ public class StopWatch {
         return this.currentTaskName != null;
     }
 
-    @Nullable
+//    @Nullable
     public String currentTaskName() {
         return this.currentTaskName;
     }

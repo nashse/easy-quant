@@ -3,6 +3,8 @@ package com.zyf.common.okhttp;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,10 +31,11 @@ public class OkHttpV3Client {
                 if (okHttpClient == null) {
                     okHttpClient = new OkHttpClient.Builder()
                             //todo 代理，注意上线打包关闭
-//                            .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 1080)))
-                            .connectTimeout(5, TimeUnit.SECONDS)
-                            .writeTimeout(5, TimeUnit.SECONDS)
-                            .readTimeout(5, TimeUnit.SECONDS)
+                            .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 7890)))
+                            .connectTimeout(15, TimeUnit.SECONDS)
+                            .connectTimeout(15, TimeUnit.SECONDS)
+                            .writeTimeout(30, TimeUnit.SECONDS)
+                            .readTimeout(30, TimeUnit.SECONDS)
                             .build();
                 }
             }
@@ -80,6 +83,7 @@ public class OkHttpV3Client {
                 .addHeader("OK-ACCESS-SIGN", lh.get("OK-ACCESS-SIGN"))
                 .addHeader("OK-ACCESS-TIMESTAMP", lh.get("OK-ACCESS-TIMESTAMP"))
                 .addHeader("OK-ACCESS-PASSPHRASE", lh.get("OK-ACCESS-PASSPHRASE"))
+                .addHeader("x-simulated-trading",  lh.get("x-simulated-trading"))
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return response.body().string();
@@ -120,6 +124,7 @@ public class OkHttpV3Client {
                 .addHeader("OK-ACCESS-SIGN", lh.get("OK-ACCESS-SIGN"))
                 .addHeader("OK-ACCESS-TIMESTAMP", lh.get("OK-ACCESS-TIMESTAMP"))
                 .addHeader("OK-ACCESS-PASSPHRASE", lh.get("OK-ACCESS-PASSPHRASE"))
+                .addHeader("x-simulated-trading",  lh.get("x-simulated-trading"))
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return response.body().string();

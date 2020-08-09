@@ -1,12 +1,10 @@
 package com.zyf.trade.proxy;
 
-import com.zyf.baseservice.IExchange;
-import com.zyf.common.model.Account;
-import com.zyf.common.model.Order;
-import com.zyf.common.model.Precision;
-import com.zyf.common.model.Trade;
+import com.zyf.baseservice.ITradeExchange;
+import com.zyf.common.model.*;
 import com.zyf.common.model.enums.ExchangeEnum;
-import com.zyf.common.util.FrameworkUtil;
+import com.zyf.common.model.enums.SecuritiesTypeEnum;
+import com.zyf.common.util.CommomUtil;
 import com.zyf.trade.factory.TradeExchangeFactory;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,7 +26,7 @@ public class TradeExchangeProxy {
     /**
      * 交易交易所对象
      */
-    private IExchange tradeExchange;
+    private ITradeExchange tradeExchange;
 
     /**
      * 交易所名称
@@ -45,14 +43,18 @@ public class TradeExchangeProxy {
      */
     Map<String, Precision> precisionMap;
 
-    public TradeExchangeProxy(ExchangeEnum exchangeName, String accessKey, String secretKey) {
-        this.tradeExchange = TradeExchangeFactory.createTradeExchange(exchangeName, accessKey, secretKey);
+    public TradeExchangeProxy(ExchangeEnum exchangeName, SecuritiesTypeEnum type, String accessKey, String secretKey) {
+        this.tradeExchange = TradeExchangeFactory.createTradeExchange(exchangeName, type, accessKey, secretKey);
         this.exchangeNameEnum = exchangeName;
         this.exchangeName = exchangeName.getValue();
     }
 
-    public TradeExchangeProxy(String exchangeName, String accessKey, String secretKey) {
-        this(FrameworkUtil.toExchangeEnum(exchangeName), accessKey, secretKey);
+    public TradeExchangeProxy(String exchangeName, String type, String accessKey, String secretKey) {
+        this(CommomUtil.toExchangeEnum(exchangeName), CommomUtil.toSecuritiesTypeEnum(type), accessKey, secretKey);
+    }
+
+    public ITradeExchange getE() {
+        return this.tradeExchange;
     }
 
     /**
@@ -181,8 +183,8 @@ public class TradeExchangeProxy {
      * @param symbol
      * @return
      */
-    public List<Order> getPosition(String symbol) {
-        List<Order> positions = this.tradeExchange.getPosition(symbol);
+    public List<Position> getPosition(String symbol) {
+        List<Position> positions = this.tradeExchange.getPositions(symbol);
         return positions;
     }
 }

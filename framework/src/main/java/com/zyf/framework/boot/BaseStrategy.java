@@ -1,7 +1,12 @@
 package com.zyf.framework.boot;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zyf.baseservice.IExchange;
+import com.zyf.baseservice.IMdExchange;
+import com.zyf.baseservice.ITradeExchange;
+import com.zyf.marketdata.factory.MdExchangeFactory;
 import com.zyf.marketdata.proxy.MdExchangeProxy;
+import com.zyf.trade.factory.TradeExchangeFactory;
 import com.zyf.trade.proxy.TradeExchangeProxy;
 
 import java.util.logging.Logger;
@@ -12,7 +17,7 @@ import java.util.logging.Logger;
  * @author yuanfeng.z
  * @date 2020/7/22 19:01
  */
-public class BaseStrategy {
+public abstract class BaseStrategy {
     /**
      * 日志
      */
@@ -41,18 +46,32 @@ public class BaseStrategy {
     /**
      * 公有交易所类
      */
-    protected MdExchangeProxy mdE;
+    protected IMdExchange mdE;
 
     /**
      * 私有交易所类
      */
-    protected TradeExchangeProxy tradeE;
+    protected ITradeExchange tradeE;
+
+    /**
+     * 初始策略运行中数据文件路径
+     */
+    protected String storeFile;
+
+    /**
+     * 0：初始化策略 1：恢复策略
+     */
+    protected Integer bInit = 0;
 
     /**
      * 初始化方法
      */
-    protected void init() {
-    }
+    protected abstract void init();
+
+    /**
+     * 恢复策略
+     */
+    protected abstract void recovery();
 
     /**
      * 默认循环

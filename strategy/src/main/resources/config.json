@@ -7,6 +7,18 @@
       "mdE" : { "exchangeName" : "deribit" },
       "tradeE" : { "exchangeName" : "deribit", "accessKey" : "accessKey/12312", "secretKey" : "secretKey" },
       "huobiproE" : { "exchangeName" : "huobipro" },
+    }
+  ]
+}
+
+{
+  "configs" : [
+    {
+      "id" : "1",
+      "exchangeName" : "huobipro",
+      "symbol" : "BTC/USD",
+      "mdE" : { "exchangeName" : "huobipro", "securitiesType" : "future" },
+      "tradeE" : { "exchangeName" : "huobipro", "securitiesType" : "future", "accessKey" : "51b2391e-uymylwhfeg-ac0468b8-d176f", "secretKey" : "b6cff0bb-dbd7fab8-1dfe9d30-4a9d7" },
       "profit" : "12"
     }
   ]

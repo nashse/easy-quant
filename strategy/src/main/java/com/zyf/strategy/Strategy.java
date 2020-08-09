@@ -13,20 +13,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Strategy extends BaseStrategy {
 
-    private String profit;
+    @Override
+    protected void init() {
 
-    private MdExchangeProxy huobiproE;
+    }
+
+    @Override
+    protected void recovery() {
+
+    }
 
     @Override
     @ScheduledByZyf(cron = "0/1 * * * * ?")
-    //@ScheduledByZyf(initialDelay = 20000, fixedDelay = 2000)
     protected void run() {
         log.info(this.toString());
         log.info(mdE.getDepth(this.symbol).toString());
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

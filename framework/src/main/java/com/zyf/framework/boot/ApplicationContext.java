@@ -3,10 +3,16 @@ package com.zyf.framework.boot;
 import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.zyf.baseservice.IExchange;
+import com.zyf.baseservice.IMdExchange;
+import com.zyf.baseservice.ITradeExchange;
 import com.zyf.framework.scheduling.ScheduleTaskManager;
 import com.zyf.framework.scheduling.ScheduledTask;
 import com.zyf.framework.scheduling.interfaces.*;
+import com.zyf.marketdata.factory.MdExchangeFactory;
 import com.zyf.marketdata.proxy.MdExchangeProxy;
+import com.zyf.trade.factory.TradeExchangeFactory;
 import com.zyf.trade.proxy.TradeExchangeProxy;
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,6 +63,8 @@ public class ApplicationContext {
 
     private final static String CONFIG_EXCHANGE_NAME = "exchangeName";
 
+    private final static String CONFIG_SECURITIESTYPE_NAME = "securitiesType";
+
     private final static String CONFIG_ACCESSKEY_NAME = "accessKey";
 
     private final static String CONFIG_SECRETKEY_NAME = "secretKey";
@@ -88,8 +96,39 @@ public class ApplicationContext {
         // 处理注解
         this.handleAnnotation();
 
+        // 初始化策略
+        this.prepareStrategy();
+
         // 启动定时任务
         this.startUpScheduler();
+    }
+
+
+    /**
+     * 准备策略
+     */
+    private void prepareStrategy() {
+        for (Map.Entry<String, Object> pair : this.beanDefinitionMap.entrySet()) {
+            if (((BaseStrategy)pair.getValue()).bInit == 0) {
+                initStrategy((BaseStrategy)pair.getValue());
+            } else if (((BaseStrategy)pair.getValue()).bInit == 1) {
+                recoveryStrategy((BaseStrategy)pair.getValue());
+            }
+        }
+    }
+
+    /**
+     * 恢复策略
+     */
+    private void recoveryStrategy(BaseStrategy baseStrategy) {
+        baseStrategy.recovery();
+    }
+
+    /**
+     * 初始化策略
+     */
+    private void initStrategy(BaseStrategy baseStrategy) {
+        baseStrategy.init();
     }
 
     /**
@@ -145,7 +184,7 @@ public class ApplicationContext {
             List<String> sup = new ArrayList<>();
             Arrays.asList(superclass.getDeclaredFields()).forEach( f -> {sup.add(f.getName());});
 
-            // 加载属性值
+            // 实例化属性
             Field fi = superclass.getDeclaredField(CONFIG_ATTRIBUTE);
             fi.setAccessible(true);
             fi.set(obj, config);
@@ -158,24 +197,28 @@ public class ApplicationContext {
                 } else if (sub.contains(p.getKey())) {
                     f = clazz.getDeclaredField(p.getKey());
                 } else {
-                    throw new RuntimeException("Reflection processing error");
+                    continue;
+//                    throw new RuntimeException("Reflection processing error");
                 }
                 f.setAccessible(true);
                 Type t = f.getGenericType();
-                if (MdExchangeProxy.class.getTypeName().equals(t.getTypeName())) {
-                    MdExchangeProxy mdExchangeProxy =
-                            new MdExchangeProxy(config.getJSONObject(f.getName()).getString(CONFIG_EXCHANGE_NAME));
-                    f.set(obj, mdExchangeProxy);
-                } else if (TradeExchangeProxy.class.getTypeName().equals(t.getTypeName())) {
-                    TradeExchangeProxy tradeExchangeProxy =
-                            new TradeExchangeProxy(config.getJSONObject(f.getName()).getString(CONFIG_EXCHANGE_NAME),
+                if (IMdExchange.class.getTypeName().equals(t.getTypeName())) {
+                    IMdExchange mdE =
+                            MdExchangeFactory.createMdExchange(config.getJSONObject(f.getName()).getString(CONFIG_EXCHANGE_NAME),
+                                    config.getJSONObject(f.getName()).getString(CONFIG_SECURITIESTYPE_NAME));
+                    f.set(obj, mdE);
+                } else if (ITradeExchange.class.getTypeName().equals(t.getTypeName())) {
+                    ITradeExchange tradeE =
+                            TradeExchangeFactory.createTradeExchange(config.getJSONObject(f.getName()).getString(CONFIG_EXCHANGE_NAME),
+                                    config.getJSONObject(f.getName()).getString(CONFIG_SECURITIESTYPE_NAME),
                                     config.getJSONObject(CONFIG_TRATE_EXCHANGE_NAME).getString(CONFIG_ACCESSKEY_NAME),
                                     config.getJSONObject(CONFIG_TRATE_EXCHANGE_NAME).getString(CONFIG_SECRETKEY_NAME));
-                    f.set(obj, tradeExchangeProxy);
+                    f.set(obj, tradeE);
                 } else {
                     f.set(obj, p.getValue());
                 }
             }
+
             // ioc Register
             if (obj != null) {
                 if (this.beanDefinitionMap.containsKey(config.getString(CONFIG_STRATEGY_ID))) {

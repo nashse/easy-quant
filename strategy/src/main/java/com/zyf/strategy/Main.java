@@ -9,8 +9,9 @@ import com.zyf.framework.EasyQuantyApplication;
  * @date 2020/7/27 19:15
  */
 public class Main {
-    public static void main(String[] args) {
-        String[] strArg = {"--config-name:config.json"};
-        EasyQuantyApplication.run(Strategy.class, strArg);
+    public static void main(String[] args) throws ClassNotFoundException {
+        args[0] = "com.zyf.strategy.OkexGridStrategy";
+        args[1] = "--config-name:grid.json";
+        EasyQuantyApplication.run(Class.forName(args[0]), args[1]);
     }
 }

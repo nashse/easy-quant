@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class Depth extends BaseData {
     /**

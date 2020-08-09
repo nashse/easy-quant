@@ -20,11 +20,15 @@ public enum Side {
      */
     SELL("sell"),
 
+    /****期货*****/
 
-    BUY_CLOSE("buy_close"),
+    OPEN_LONG("openLong"),
 
+    OPEN_SHORT("openShort"),
 
-    SELL_CLOSE("sell_close");
+    CLOSE_LONG("closeLong"),
+
+    CLOSE_SHORT("closeShort");
 
 
     private String value;
@@ -44,10 +48,14 @@ public enum Side {
             return BUY;
         } else if (SELL.value.equals(side)) {
             return SELL;
-        }else if (BUY_CLOSE.value.equals(side)) {
-            return SELL;
-        }else if (SELL_CLOSE.value.equals(side)) {
-            return SELL;
+        }else if (OPEN_LONG.value.equals(side)) {
+            return OPEN_LONG;
+        }else if (OPEN_SHORT.value.equals(side)) {
+            return OPEN_SHORT;
+        }else if (CLOSE_LONG.value.equals(side)) {
+            return CLOSE_LONG;
+        }else if (CLOSE_SHORT.value.equals(side)) {
+            return CLOSE_SHORT;
         }
         return null;
     }

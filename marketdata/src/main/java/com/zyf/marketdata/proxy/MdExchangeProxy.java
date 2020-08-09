@@ -1,13 +1,14 @@
 package com.zyf.marketdata.proxy;
 
-import com.zyf.baseservice.IExchange;
+import com.zyf.baseservice.IMdExchange;
 import com.zyf.baseservice.model.enums.CacheNameEnum;
 import com.zyf.common.model.Depth;
 import com.zyf.common.model.Precision;
 import com.zyf.common.model.Ticker;
 import com.zyf.common.model.enums.ExchangeEnum;
+import com.zyf.common.model.enums.SecuritiesTypeEnum;
 import com.zyf.common.util.EhcacheUtil;
-import com.zyf.common.util.FrameworkUtil;
+import com.zyf.common.util.CommomUtil;
 import com.zyf.marketdata.factory.MdExchangeFactory;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class MdExchangeProxy {
     /**
      * 交易交易所对象
      */
-    private IExchange mdExchange;
+    private IMdExchange mdExchange;
 
     /**
      * 交易所名称（枚举）
@@ -40,8 +41,8 @@ public class MdExchangeProxy {
      */
     private String exchangeName;
 
-    public MdExchangeProxy(ExchangeEnum name) {
-        this.mdExchange = MdExchangeFactory.createMdExchange(name);
+    public MdExchangeProxy(ExchangeEnum name, SecuritiesTypeEnum type) {
+        this.mdExchange = MdExchangeFactory.createMdExchange(name, type);
         this.exchangeNameEnum = name;
         this.exchangeName = name.getValue();
         EhcacheUtil.initCacheManager();
@@ -49,8 +50,8 @@ public class MdExchangeProxy {
         EhcacheUtil.createCache(CacheNameEnum.DEPTH.getValue(), String.class, Depth.class);
     }
 
-    public MdExchangeProxy(String exchangeName) {
-        this(FrameworkUtil.toExchangeEnum(exchangeName));
+    public MdExchangeProxy(String exchangeName, String type) {
+        this(CommomUtil.toExchangeEnum(exchangeName), CommomUtil.toSecuritiesTypeEnum(type));
     }
 
     /**

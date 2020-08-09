@@ -332,4 +332,6 @@ public class HuobiProUtil {
     public static String transfSymbol(String symbol) {
         return symbol.replace("/", "").toLowerCase();
     }
+
+
 }

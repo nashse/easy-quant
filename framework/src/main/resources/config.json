@@ -4,8 +4,8 @@
       "id" : "1",
       "exchangeName" : "deribit",
       "symbol" : "BTC-PERPETUAL",
-      "mdE" : { "exchangeName" : "deribit" },
-      "tradeE" : { "exchangeName" : "deribit", "accessKey" : "accessKey/12312", "secretKey" : "secretKey" },
+      "mdE" : { "exchangeName" : "deribit", "securitiesType" : "future" },
+      "tradeE" : { "exchangeName" : "deribit","securitiesType" : "future", "accessKey" : "accessKey/12312", "secretKey" : "secretKey" },
       "huobiproE" : { "exchangeName" : "huobipro" },
       "profit" : "12"
     }

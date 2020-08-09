@@ -96,7 +96,6 @@ public class OkexSignUtil {
      */
     public static LinkedHashMap<String, String> sign(String method, String address, LinkedHashMap<String, Object> body, String resourcePath, String apiKey, String secretKey, String passPhrase) {
 
-
         String epoch = formatEpoch(System.currentTimeMillis());
 
         StringBuilder s = new StringBuilder();
@@ -108,6 +107,7 @@ public class OkexSignUtil {
         lh.put("OK-ACCESS-SIGN", sign);
         lh.put("OK-ACCESS-TIMESTAMP", epoch);
         lh.put("OK-ACCESS-PASSPHRASE", passPhrase);
+        lh.put("x-simulated-trading",  "1");
 
         return lh;
     }
