@@ -14,14 +14,12 @@ import com.zyf.common.okhttp.OkHttpV3ClientProxy;
 import javafx.geometry.Pos;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * 火币期货交易类
- *
+ * 火币交割期货交易类
+ * https://huobiapi.github.io/docs/dm/v1/en/#introduction
  * @author yuanfeng.z
  * @date 2020/7/29 20:10
  */
@@ -86,6 +84,16 @@ public class HuobiProTradeFutExchange implements ITradeExchange {
      * 合约计划委托全部撤单
      */
     protected static final String TRIGGER_CANCEL_ALL = "/swap-api/v1/swap_trigger_cancelall";
+
+    /**
+     * 期货成交明细
+     */
+    protected static final String FUT_TRADES = "/api/v1/contract_order_detail";
+
+    /**
+     * 期货历史订单
+     */
+    protected static final String FUT_HIS_ORDERS = "/api/v1/contract_hisorders";
 
     /**
      * 公钥
@@ -205,7 +213,41 @@ public class HuobiProTradeFutExchange implements ITradeExchange {
 
     @Override
     public List<Order> getOrders(String symbol) {
-        return null;
+        String asset = symbol.split("-")[0];
+        List<Order> orders = new ArrayList<>();
+        int beginSize = orders.size();
+        for (int i = 1; i <= 50; i++) {
+            // 部分成交订单, 全部成交订单
+            LinkedHashMap<String, String> paramMap = new LinkedHashMap<>();
+            String url = HuobiProSignUtil.signRequestUrl(HttpMethod.POST,
+                    PROTOCOL,
+                    SITE,
+                    FUT_HIS_ORDERS,
+                    this.accessKey,
+                    this.secretKey,
+                    paramMap);
+            Map<String, Object> map = new HashMap<>();
+            map.put("symbol", asset);
+//            map.put("contract_code", symbol);
+            map.put("trade_type", 0);
+            map.put("type", 1);
+            map.put("status", "4,6");
+            map.put("page_index", i);
+            map.put("page_size", 50);
+            map.put("create_date", 90);
+            String jsonStr = OkHttpV3ClientProxy.post(url, JSON.toJSONString(map));
+            JSONObject jo = JSONObject.parseObject(jsonStr);
+            orders.addAll(HuobiProFutUtil.parseOrders(jo));
+            if (beginSize == orders.size()) {
+                break;
+            } else {
+                beginSize = orders.size();
+            }
+        }
+        List<Order> ordersWithoutDuplicates = orders.stream().distinct().collect(Collectors.toList());
+        List<Order> newOrders = ordersWithoutDuplicates.stream().sorted(Comparator.comparing(Order::getTimestamp))
+                .collect(Collectors.toList());
+        return newOrders;
     }
 
     /**
@@ -275,8 +317,26 @@ public class HuobiProTradeFutExchange implements ITradeExchange {
     }
 
     @Override
-    public List<Trade> getTrade(String symbol, String orderId) {
-        return null;
+    public List<Trade> getTrades(String symbol, String paramCom) {
+        String[] params = paramCom.split("/");
+
+        LinkedHashMap<String, String> paramMap = new LinkedHashMap<>();
+        String url = HuobiProSignUtil.signRequestUrl(HttpMethod.POST,
+                PROTOCOL,
+                SITE,
+                FUT_TRADES,
+                this.accessKey,
+                this.secretKey,
+                paramMap);
+        Map<String, Object> map = new HashMap<>();
+        map.put("symbol", symbol);
+        map.put("order_id", params[0]);
+        map.put("created_at", params[1]);
+        map.put("order_type", params[2]);
+
+        String jsonStr = OkHttpV3ClientProxy.post(url, JSON.toJSONString(map));
+        JSONObject jo = JSONObject.parseObject(jsonStr);
+        return HuobiProFutUtil.parseTrades(jo);
     }
 
     /**
@@ -531,10 +591,10 @@ public class HuobiProTradeFutExchange implements ITradeExchange {
      * @return
      */
     @Override
-    public String triggerCloseBuy(String instrument,
-                                  BigDecimal triggerPrice,
-                                  BigDecimal quantity,
-                                  Integer leverRate) {
+    public String triggerCloseLong(String instrument,
+                                   BigDecimal triggerPrice,
+                                   BigDecimal quantity,
+                                   Integer leverRate) {
         // 转换币对格式
         instrument = HuobiProFutUtil.transfSymbol(instrument);
 
@@ -569,6 +629,16 @@ public class HuobiProTradeFutExchange implements ITradeExchange {
         return orderId;
     }
 
+    @Override
+    public String trackingCloseShort(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
+    @Override
+    public String trackingCloseLong(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
     /**
      * 委托下单：平卖
      * @param instrument 合约
@@ -578,10 +648,10 @@ public class HuobiProTradeFutExchange implements ITradeExchange {
      * @return
      */
     @Override
-    public String triggerCloseSell(String instrument,
-                                   BigDecimal triggerPrice,
-                                   BigDecimal quantity,
-                                   Integer leverRate) {
+    public String triggerCloseShort(String instrument,
+                                    BigDecimal triggerPrice,
+                                    BigDecimal quantity,
+                                    Integer leverRate) {
         // 转换币对格式
         instrument = HuobiProFutUtil.transfSymbol(instrument);
 
@@ -685,5 +755,26 @@ public class HuobiProTradeFutExchange implements ITradeExchange {
     @Override
     public Boolean setLeverage(String instrument, BigDecimal leverage) {
         return null;
+    }
+
+    public static void main(String[] args) {
+        HuobiProTradeFutExchange df = new HuobiProTradeFutExchange("xxx-xxx-xx-xx",
+                "xx-xx-xxx-xx");
+        List<Order> orders = df.getOrders("BTC");
+
+        for (Order o : orders) {
+            JSONObject json = JSON.parseObject(o.getOriginData());
+            Long time = o.getTimestamp();
+            String orderType = json.getString("order_type");
+            StringBuilder sb = new StringBuilder();
+            sb.append(o.getOrderId())
+                    .append("/")
+                    .append(time)
+                    .append("/")
+                    .append(orderType);
+            List<Trade> trades = df.getTrades("BTC", sb.toString());
+            System.out.println(trades.toString());
+        }
+        System.out.println();
     }
 }

@@ -1,6 +1,7 @@
 package com.zyf.framework.util;
 
 import java.io.*;
+import java.net.URLDecoder;
 
 /**
  * 文件工具
@@ -40,11 +41,18 @@ public class FileUtil {
      * 写json文件
      *
      * @param fileName 文件名
-     * @param content json格式字符串
+     * @param content  json格式字符串
      */
     public static void writeJsonFile(String fileName, String content) {
         try {
-            FileWriter fileWriter = new FileWriter("/" + fileName);
+            boolean isWin = System.getProperty("os.name").toLowerCase().contains("win");
+            FileWriter fileWriter = null;
+            if (isWin) {
+                java.net.URL uri = FileUtil.class.getClass().getResource("/");
+                fileWriter = new FileWriter(uri.getPath() + "/" + fileName);
+            } else {
+                fileWriter = new FileWriter("./" + fileName);
+            }
             fileWriter.write(content);
             fileWriter.flush();
             fileWriter.close();

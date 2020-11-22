@@ -10,6 +10,7 @@ import com.zyf.common.model.enums.Type;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.math.BigDecimal.ZERO;
 
@@ -60,6 +61,27 @@ public class OkexUtil {
         }
         return new Depth(null, timestamp, levelsBids, levelsAsks);
     }
+
+    public static List<Kline> parseKlines(JSONArray array) {
+        if (array == null) { return null; };
+
+//        Map<Long, Kline> map = new TreeMap<>();
+        List<Kline> klines = new ArrayList<>();
+        for (int i = 0; i < array.size(); i++) {
+            Kline kline = new Kline(array.getJSONArray(i).toString(),
+                    array.getJSONArray(i).getLong(0),
+                    array.getJSONArray(i).getBigDecimal(1),
+                    array.getJSONArray(i).getBigDecimal(2),
+                    array.getJSONArray(i).getBigDecimal(3),
+                    array.getJSONArray(i).getBigDecimal(4),
+                    array.getJSONArray(i).getBigDecimal(5)
+                    );
+//            map.put(array.getJSONArray(i).getLong(0), kline);
+            klines.add(kline);
+        }
+        return klines;
+    }
+
 
     public static Map<String, Precision> parsePrecisions(JSONArray jo) {
         if (jo.isEmpty()) { return null; }

@@ -26,9 +26,10 @@ public interface IMdExchange {
      * 获取kline
      *
      * @param symbol 币对
+     * @param granularity 级别
      * @return
      */
-    List<Kline> getKline(String symbol);
+    List<Kline> getKline(String symbol, String granularity);
 
     /**
      * 获取深度

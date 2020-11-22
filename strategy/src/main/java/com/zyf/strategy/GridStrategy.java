@@ -84,10 +84,10 @@ public class GridStrategy extends BaseStrategy {
             // 止损
             BigDecimal price = bidPrice.multiply(BigDecimal.ONE.subtract(spreadRate.multiply(new BigDecimal("2")))).setScale(1, RoundingMode.UP);
             price = MathUtil.adjustMinUtil(price, minUtil, RoundingMode.UP);
-            id = tradeE.triggerCloseBuy(this.symbol, price, new BigDecimal("1"), 1);
+            id = tradeE.triggerCloseLong(this.symbol, price, new BigDecimal("1"), 1);
             price = askPrice.multiply(BigDecimal.ONE.add(spreadRate.multiply(new BigDecimal("2")))).setScale(1, RoundingMode.DOWN);
             price = MathUtil.adjustMinUtil(price, minUtil, RoundingMode.DOWN);
-            id = tradeE.triggerCloseSell(this.symbol, price, new BigDecimal("1"), 1);
+            id = tradeE.triggerCloseShort(this.symbol, price, new BigDecimal("1"), 1);
 
             // 下单
             price = bidPrice.multiply(BigDecimal.ONE.subtract(spreadRate)).setScale(1, RoundingMode.DOWN);;

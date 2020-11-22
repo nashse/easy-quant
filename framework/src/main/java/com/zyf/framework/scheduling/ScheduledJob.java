@@ -27,6 +27,8 @@ public class ScheduledJob implements Job {
             throw new RuntimeException(e.getMessage());
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

@@ -296,4 +296,13 @@ public class ApplicationContext {
     public JSONObject prepareConfig(String[] args) {
         return Environment.prepareConfig(args);
     }
+
+    /**
+     * 获取ioc容器
+     * @return
+     */
+    public Map<String, Object> getBeanDefinitionMap() {
+        return beanDefinitionMap;
+    }
+
 }

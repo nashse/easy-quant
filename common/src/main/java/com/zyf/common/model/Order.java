@@ -10,9 +10,11 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * 订单类
+ *
  * @author yuanfeng.z
  * @date 2019/6/29 10:14
  */
@@ -67,7 +69,7 @@ public class Order implements Serializable {
      * 状态（全部成交、未成交等）
      */
     private final State state;
-    
+
 
     public Order(String originData, Long timestamp, String orderId, BigDecimal price, BigDecimal quantity, BigDecimal deal, Side side, Type type, State state) {
         this.originData = originData;
@@ -91,5 +93,22 @@ public class Order implements Serializable {
         this.side = side;
         this.type = null;
         this.state = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Order order = (Order) o;
+        return Objects.equals(orderId, order.orderId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(originData, timestamp, orderId, price, quantity, deal, side, type, state);
     }
 }

@@ -1,4 +1,4 @@
-package com.zyf.marketdata.http.option.deribit;
+package com.zyf.marketdata.http.option;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -8,8 +8,7 @@ import com.zyf.common.model.Depth;
 import com.zyf.common.model.Kline;
 import com.zyf.common.model.Precision;
 import com.zyf.common.model.Ticker;
-import com.zyf.common.model.enums.ExchangeEnum;
-import com.zyf.common.model.future.Instrument;
+import com.zyf.common.model.option.Instrument;
 import com.zyf.common.okhttp.OkHttpV3ClientProxy;
 
 import java.util.ArrayList;
@@ -63,6 +62,11 @@ public class DeribitMdExchange implements IMdExchange {
     private static final String INSTRUMENTS = "/api/v2/public/get_instruments";
 
     /**
+     * 合约
+     */
+    private static final String LAST_TRADES = "/api/v2//public/get_last_trades_by_currency";
+
+    /**
      * 币对
      */
     private static final String CURRENCIES = "/api/v2/public/get_currencies";
@@ -104,7 +108,7 @@ public class DeribitMdExchange implements IMdExchange {
     }
 
     @Override
-    public List<Kline> getKline(String symbol) {
+    public List<Kline> getKline(String symbol, String granularity) {
         return null;
     }
 
@@ -160,6 +164,16 @@ public class DeribitMdExchange implements IMdExchange {
         return DeribitUtil.parseCurrencyInstrument(jo);
     }
 
+    public static List<Instrument> getLastTradesByCurrency(String currency) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(URL).append(LAST_TRADES).append("?")
+                .append("currency=").append(currency)
+                .append("&kind=").append("option");
+        String result = OkHttpV3ClientProxy.get(sb.toString());
+        JSONObject jo = JSONObject.parseObject(result);
+        return DeribitUtil.parseLastTradesByCurrency(jo);
+    }
+
     /**
      * 获取币对列表
      * @return
@@ -180,7 +194,26 @@ public class DeribitMdExchange implements IMdExchange {
 
     public static void main(String[] args) {
         log.info(DeribitMdExchange.getInstance().getDepth("ETH-PERPETUAL").toString());
-
+        List<Instrument> list = DeribitMdExchange.getCurrencyInstrument("BTC");
+        for (Instrument i : list) {
+            if (!i.getActive()) {
+                log.info(i.toString());
+                log.info("" + list.size());
+            }
+            Depth depth = DeribitMdExchange.getInstance().getDepth(i.getName());
+//            log.info(depth.toString());
+        }
+        List<Instrument> lk = DeribitMdExchange.getLastTradesByCurrency("BTC");
+        for (Instrument i : lk) {
+            log.info(i.toString());
+            log.info("" + list.size());
+            if (!i.getActive()) {
+                log.info(i.toString());
+                log.info("" + list.size());
+            }
+//            Depth depth = DeribitMdExchange.getInstance().getDepth(i.getName());
+//            log.info(depth.toString());
+        }
     }
 
 }

@@ -140,14 +140,8 @@ public class ScheduledTask {
         }
         return this;
     }
-//
-//    public ScheduledTask set(Method method) {
-//        this.method = method;
-//        return this;
-//    }
-//
-//    public ScheduledTask setStrategyIns(Object strategyIns) {
-//        this.strategyIns = strategyIns;
-//        return this;
-//    }
+
+    public void shutdown() throws SchedulerException {
+        this.scheduler.shutdown();
+    }
 }

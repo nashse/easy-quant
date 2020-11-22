@@ -3,10 +3,7 @@ package com.zyf.baseservice.util.okex;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.zyf.common.model.Account;
-import com.zyf.common.model.Balance;
-import com.zyf.common.model.Order;
-import com.zyf.common.model.Position;
+import com.zyf.common.model.*;
 import com.zyf.common.model.enums.Side;
 import com.zyf.common.model.enums.State;
 
@@ -14,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * okex期货工具类
@@ -128,6 +126,27 @@ public class OkexFutUtil {
         return new Order(json.toJSONString(), time, id, price, quantity, deal, side, null, state);
     }
 
+    /**
+     * 序列化成交明细
+     * @param array 交易所返回数据
+     * @return
+     */
+    public static List<Trade> parseTrades(JSONArray array) {
+        List<Trade> trades = new LinkedList<>();
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject json = array.getJSONObject(i);
+            Trade trade = new Trade(json.toJSONString(),
+                    json.getTimestamp("timestamp").getTime(),
+                    json.getString("order_id"),
+                    json.getString("trade_id"),
+                    json.getBigDecimal("price"),
+                    json.getBigDecimal("order_qty"),
+                    json.getBigDecimal("fee"),
+                    null);
+            trades.add(trade);
+        }
+        return trades;
+    }
 
     /**
      * 序列化撤销计划订单
@@ -187,7 +206,11 @@ public class OkexFutUtil {
         JSONArray array = json.getJSONArray("holding");
         List<Position> positions = new LinkedList<>();
         for (int i = 0; i < array.size(); i++) {
-            positions.add(parsePosition(array.getJSONObject(i)));
+            Position position = parsePosition(array.getJSONObject(i));
+            if (Objects.isNull(position)) {
+                continue;
+            }
+            positions.add(position);
         }
         return positions;
     }
@@ -203,6 +226,7 @@ public class OkexFutUtil {
         BigDecimal liquidationPrice = json.getBigDecimal("liquidation_price");
         BigDecimal quantity = json.getBigDecimal("position");
         BigDecimal availQuantity = json.getBigDecimal("avail_position");
+        if (BigDecimal.ZERO.equals(availQuantity)) { return null; }
         BigDecimal avgCost = json.getBigDecimal("avg_cost");
         BigDecimal settlementPrice = json.getBigDecimal("settlement_price");
         BigDecimal settledPnl = json.getBigDecimal("settled_pnl");

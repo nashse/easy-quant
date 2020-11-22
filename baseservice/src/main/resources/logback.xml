@@ -10,7 +10,7 @@
     <property name="log.level" value="info"/>
 
     <!-- 日志文件的目录路径-->
-    <property name="log.path" value="/logs/"/>
+    <property name="log.path" value="./logs/"/>
 
     <!--输出到控制台-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -71,8 +71,8 @@
     </appender>
 
     <!-- 打印动态数据源的日志信息，开发环境才启用 -->
-    <logger name="com.baomidou.dynamic" level="debug" additivity="false">
-        <appender-ref ref="dynamic_datasource_console"/>
-    </logger>
+<!--    <logger name="com.baomidou.dynamic" level="debug" additivity="false">-->
+<!--        <appender-ref ref="dynamic_datasource_console"/>-->
+<!--    </logger>-->
 
 </configuration>

@@ -162,8 +162,8 @@ public class OkexSignUtil {
 
     public static void main(String[] args) {
 
-        String appKey = "549cd388-d744-4e71-8290-18cb2c9a3748";
-        String secret = "5B66D87B90E7C37CD4123105A6DA527B";
+        String appKey = "xx-xx-x-x-x";
+        String secret = "xx";
         String address = "https://www.okex.com";
         String passPrase = "123456mzy";
         String body = null;

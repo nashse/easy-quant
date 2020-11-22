@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * trade交易所接口
  * <br> 私有接口
+ *
  * @author yuanfeng.z
  * @date 2019/6/28 15:33
  */
@@ -185,7 +186,7 @@ public interface ITradeExchange {
      * @param orderId 订单id
      * @return
      */
-    List<Trade> getTrade(String symbol, String orderId);
+    List<Trade> getTrades(String symbol, String orderId);
 
     /*****************期货********************/
 
@@ -323,28 +324,55 @@ public interface ITradeExchange {
      * @param instrument   合约
      * @param triggerPrice 触发价，精度超过最小变动单位会报错
      * @param quantity     委托数量(张)
-     * @param leverRate 杠杆
+     * @param leverRate    杠杆
      * @return
      */
-    String triggerCloseBuy(String instrument,
-                           BigDecimal triggerPrice,
-                           BigDecimal quantity,
-                           Integer leverRate);
-
-    /**
-     * 委托下单：平卖
-     *
-     * @param instrument   合约
-     * @param triggerPrice 触发价，精度超过最小变动单位会报错
-     * @param quantity     委托数量(张)
-     * @param leverRate 杠杆
-     * @return
-     */
-    String triggerCloseSell(String instrument,
+    String triggerCloseLong(String instrument,
                             BigDecimal triggerPrice,
                             BigDecimal quantity,
                             Integer leverRate);
 
+    /**
+     * 跟踪下单：平空
+     *
+     * @param instrument 合约名
+     * @param triggerPrice 激活价格 ，填写值0\<X\<=100000
+     * @param quantity 数量
+     * @param callbackRate 	回调幅度，填写值0.001（0.1%）\<=X\<=0.05（5%）
+     * @return
+     */
+    String trackingCloseShort(String instrument,
+                              BigDecimal triggerPrice,
+                              BigDecimal quantity,
+                              BigDecimal callbackRate);
+
+    /**
+     * 跟踪委托：平多
+     *
+     * @param instrument 合约名
+     * @param triggerPrice 激活价格 ，填写值0\<X\<=100000
+     * @param quantity 数量
+     * @param callbackRate 	回调幅度，填写值0.001（0.1%）\<=X\<=0.05（5%）
+     * @return
+     */
+    String trackingCloseLong(String instrument,
+                             BigDecimal triggerPrice,
+                             BigDecimal quantity,
+                             BigDecimal callbackRate);
+
+    /**
+     * 跟踪委托：平卖
+     *
+     * @param instrument   合约
+     * @param triggerPrice 触发价，精度超过最小变动单位会报错
+     * @param quantity     委托数量(张)
+     * @param leverRate    杠杆
+     * @return
+     */
+    String triggerCloseShort(String instrument,
+                             BigDecimal triggerPrice,
+                             BigDecimal quantity,
+                             Integer leverRate);
 
     /**
      * 获取计划委托所有的正在挂的订单
@@ -364,16 +392,18 @@ public interface ITradeExchange {
 
     /**
      * 批量撤销计划订单
+     *
      * @param instrument 合约名
-     * @param ids 订单id列表
+     * @param ids        订单id列表
      * @return
      */
     Boolean triggerCancelOrders(String instrument, List<String> ids);
 
     /**
      * 设置杠杆
+     *
      * @param instrument 合約名
-     * @param leverage 杠杆
+     * @param leverage   杠杆
      * @return
      */
     Boolean setLeverage(String instrument, BigDecimal leverage);

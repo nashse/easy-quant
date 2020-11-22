@@ -362,8 +362,8 @@ public class OkexTradeExchange implements ITradeExchange {
     }
 
     public static void main(String[] args) {
-        /*String appKey = "549cd388-d744-4e71-8290-18cb2c9a3748";
-        String secret = "5B66D87B90E7C37CD4123105A6DA527B";
+        /*String appKey = "xxx-d744-4e71-8290-18cb2c9a3748";
+        String secret = "xxx";
         String passPrase = "123456mzy";
         appKey += "/"+passPrase;
         IExchange iExchange = TradeExchangeFactory.createTradeExchange(ExchangeEnum.OKEXV3, appKey, secret);
@@ -405,7 +405,7 @@ public class OkexTradeExchange implements ITradeExchange {
      * @return
      */
     @Override
-    public List<Trade> getTrade(String symbol, String orderId) {
+    public List<Trade> getTrades(String symbol, String orderId) {
 
         symbol = OkexUtil.transfSymbolToLower(symbol);
 
@@ -477,12 +477,22 @@ public class OkexTradeExchange implements ITradeExchange {
     }
 
     @Override
-    public String triggerCloseBuy(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
+    public String triggerCloseLong(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
         return null;
     }
 
     @Override
-    public String triggerCloseSell(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
+    public String trackingCloseShort(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
+    @Override
+    public String trackingCloseLong(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
+    @Override
+    public String triggerCloseShort(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
         return null;
     }
 

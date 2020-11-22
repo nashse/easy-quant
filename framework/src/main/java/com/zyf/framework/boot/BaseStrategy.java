@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.zyf.baseservice.IExchange;
 import com.zyf.baseservice.IMdExchange;
 import com.zyf.baseservice.ITradeExchange;
+import com.zyf.common.model.Depth;
 import com.zyf.marketdata.factory.MdExchangeFactory;
 import com.zyf.marketdata.proxy.MdExchangeProxy;
 import com.zyf.trade.factory.TradeExchangeFactory;
 import com.zyf.trade.proxy.TradeExchangeProxy;
 
+import java.math.BigDecimal;
 import java.util.logging.Logger;
 
 /**
@@ -82,7 +84,27 @@ public abstract class BaseStrategy {
     /**
      * 退出方法
      */
-    protected void destroy() {
+    public void destroy() {
+    }
+
+    /**
+     * 获取买一
+     * @return
+     */
+    public BigDecimal getBid1() {
+        Depth depth = mdE.getDepth(symbol);
+        BigDecimal bid1 = depth.getBids().get(0).getPrice();
+        return bid1;
+    }
+
+    /**
+     * 获取卖一
+     * @return
+     */
+    public BigDecimal getAsk1() {
+        Depth depth = mdE.getDepth(symbol);
+        BigDecimal ask1 = depth.getAsks().get(0).getPrice();
+        return ask1;
     }
 
     @Override

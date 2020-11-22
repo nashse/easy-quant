@@ -6,7 +6,7 @@ import com.zyf.common.model.enums.SecuritiesTypeEnum;
 import com.zyf.common.util.CommomUtil;
 import com.zyf.marketdata.http.future.HuobiProMdFutExchange;
 import com.zyf.marketdata.http.future.OkexMdFutExchange;
-import com.zyf.marketdata.http.option.deribit.DeribitMdExchange;
+import com.zyf.marketdata.http.option.DeribitMdExchange;
 import com.zyf.marketdata.http.stock.HuobiProMdExchange;
 import com.zyf.marketdata.http.stock.OkexMdExchange;
 

@@ -222,7 +222,13 @@ public class HuobiProSignUtil {
     private static final String timestamp = "Timestamp";
     private static final String signature = "Signature";
     private static final String accessKeyId = "AccessKeyId";
-    public static String signRequestUrl(HttpMethod method, String protocol, String site, String resourcePath, String accessKey, String secretKey, LinkedHashMap<String, String> paramMap) {
+    public static String signRequestUrl(HttpMethod method,
+                                        String protocol,
+                                        String site,
+                                        String resourcePath,
+                                        String accessKey,
+                                        String secretKey,
+                                        LinkedHashMap<String, String> paramMap) {
         // 加密后的拼接参数
         StringBuffer sbParams = HuobiProSignUtil.signRequestParam(method, site, resourcePath, accessKey, secretKey, paramMap);
 
@@ -287,8 +293,8 @@ public class HuobiProSignUtil {
     }
 
     public static void main(String[] args) {
-        String appKey = "a4a8e954-14ec032d-78881e2b-xa2b53ggfc";
-        String secretKey = "eb42b403-3099e389-c7e54887-e1241";
+        String appKey = "xxx-xxx-xxx-xxx";
+        String secretKey = "xxx-xxx-xxx-xxx";
         String address = "api.huobi.pro";
         /*********下单接口签名*********/
         String resourcePath = "/v1/account/accounts";

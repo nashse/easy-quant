@@ -1,6 +1,7 @@
 package com.zyf.framework.scheduling;
 
 import lombok.Getter;
+import org.quartz.SchedulerException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * 定时任务管理类
+ *
  * @author yuanfeng.z
  * @date 2020/7/24 23:36
  */
@@ -27,6 +29,7 @@ public class ScheduleTaskManager {
 
     /**
      * 添加任务
+     *
      * @param scheduledTask 定时任务
      */
     public void add(ScheduledTask scheduledTask) {
@@ -39,6 +42,12 @@ public class ScheduleTaskManager {
     public void start() {
         for (ScheduledTask scheduledTask : this.scheduledTasks) {
             scheduledTask.start();
+        }
+    }
+
+    public void shutdown() throws SchedulerException {
+        for (ScheduledTask scheduledTask : this.scheduledTasks) {
+            scheduledTask.shutdown();
         }
     }
 }

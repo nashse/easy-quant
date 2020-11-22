@@ -6,8 +6,8 @@ import com.zyf.common.model.Depth;
 import com.zyf.common.model.Level;
 import com.zyf.common.model.Precision;
 import com.zyf.common.model.Ticker;
-import com.zyf.common.model.future.Instrument;
-import com.zyf.common.model.future.Instrument.Type;
+import com.zyf.common.model.option.Instrument;
+import com.zyf.common.model.option.Instrument.Type;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -71,7 +71,7 @@ public class DeribitUtil {
         }
         asks.sort(Comparator.comparing(Level::getPrice));
         bids.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
-        return new Depth(null, timestamp, bids, asks);
+        return new Depth(jo.toJSONString(), timestamp, bids, asks);
     }
 
     public static Map<String, Precision> parseCurrencyPrecisions(JSONObject jo) {
@@ -104,6 +104,7 @@ public class DeribitUtil {
                     JSONObject j = (JSONObject) jsonobejct;
                     list.add(
                             new Instrument(
+                                    null,
                                     j.getString("instrument_name"),
                                     Type.OPTION,
                                     j.getString("base_currency"),
@@ -112,7 +113,46 @@ public class DeribitUtil {
                                     null,
                                     j.getBigDecimal("tick_size"),
                                     j.getBoolean("is_active"),
+                                    null,
                                     Instrument.Settle.valueOf(j.getString("settlement_period").toUpperCase()),
+                                    j.getBigDecimal("strike"),
+                                    j.getLong("creation_timestamp"),
+                                    j.getLong("expiration_timestamp"))
+                    );
+                }
+                return list;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 序列化期权合约
+     *
+     * @param jo json格式的期权合约数据
+     * @return
+     */
+    public static List<Instrument> parseLastTradesByCurrency(JSONObject jo) {
+        if (Objects.nonNull(jo)) {
+            List<Instrument> list = new ArrayList<>();
+            JSONArray result = jo.getJSONArray("result");
+            if (0 < result.size()) {
+                for (Object jsonobejct : result) {
+                    JSONObject j = (JSONObject) jsonobejct;
+                    list.add(
+                            new Instrument(
+                                    null,
+                                    j.getString("instrument_name"),
+                                    Type.OPTION,
+                                    j.getString("base_currency"),
+                                    null,
+                                    j.getBigDecimal("min_trade_amount"),
+                                    null,
+                                    j.getBigDecimal("tick_size"),
+                                    j.getBoolean("is_active"),
+                                    null,
+                                    Instrument.Settle.valueOf(j.getString("settlement_period").toUpperCase()),
+                                    j.getBigDecimal("strike"),
                                     j.getLong("creation_timestamp"),
                                     j.getLong("expiration_timestamp"))
                     );

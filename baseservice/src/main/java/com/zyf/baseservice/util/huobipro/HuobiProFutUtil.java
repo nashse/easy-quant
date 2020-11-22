@@ -6,6 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.zyf.common.model.enums.Side;
 import com.zyf.common.model.enums.State;
 import com.zyf.common.model.enums.Type;
+import com.zyf.common.model.future.InstrumentFut;
+import com.zyf.common.model.option.Instrument;
+import com.zyf.common.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -63,6 +66,74 @@ public class HuobiProFutUtil {
     }
 
     /**
+     * 序列化kline
+     *
+     * @param jo json格式的kline数据
+     * @return
+     */
+    public static List<Kline> parseKline(JSONObject jo) {
+        if (jo == null) {
+            return null;
+        }
+        String status = jo.getString("status");
+        if (!"ok".equals(status)) {
+            return null;
+        }
+
+        JSONArray klines = jo.getJSONArray("data");
+        if (klines == null) {
+            return null;
+        }
+
+        List<Kline> klineList = new ArrayList<>();
+        for (int i =0; i < klines.size(); i++) {
+            Kline kline = new Kline(klines.getJSONObject(i).toJSONString(),
+                    null,
+                    klines.getJSONObject(i).getBigDecimal("open"),
+                    klines.getJSONObject(i).getBigDecimal("high"),
+                    klines.getJSONObject(i).getBigDecimal("low"),
+                    klines.getJSONObject(i).getBigDecimal("close"),
+                    klines.getJSONObject(i).getBigDecimal("vol"));
+            klineList.add(kline);
+        }
+        return klineList;
+    }
+
+
+    /**
+     * 序列化deliveryContracts
+     *
+     * @param jo json格式的deliveryContracts数据
+     * @return
+     */
+    public static List<InstrumentFut> parseDeliveryContracts(JSONObject jo) {
+        if (jo == null) {
+            return null;
+        }
+        Long timestamp = jo.getLong("ts");
+        JSONArray data = jo.getJSONArray("data");
+        if (data == null) {
+            return null;
+        }
+
+        List<InstrumentFut> instruments = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            JSONObject j = data.getJSONObject(i);
+            instruments.add(new InstrumentFut(
+                    null,
+                    j.getString("contract_code"),
+                    j.getString("symbol"),
+                    null,
+                    j.getBigDecimal("price_tick"),
+                    null,
+                    j.getString("contract_type"),
+                    DateUtil.str2TimeStamp(j.getString("create_date"), DateUtil.yyyyMMdd),
+                    DateUtil.str2TimeStamp(j.getString("delivery_date"), DateUtil.yyyyMMdd)));
+        }
+        return instruments;
+    }
+
+    /**
      * 解析Order
      *
      * @param jo 原始数据
@@ -116,23 +187,30 @@ public class HuobiProFutUtil {
 //                "              }");
 //
 //        t = jsonObject ;
-        Long time = jo.getDate("created_at").getTime();
-        String id = jo.getString("id");
+        Long time = jo.getDate("create_date").getTime();
+        String id = jo.getString("order_id");
         Side side = null;
         Type type = null;
         switch (jo.getString("direction")) {
             case "buy":
                 side = Side.BUY;
+                break;
             case "sell":
                 side = Side.SELL;
+                break;
+            default:
+                side = null;
         }
 
-        BigDecimal price = jo.getBigDecimal("trigger_price") != null ? jo.getBigDecimal("trigger_price") : jo.getBigDecimal("price");
+        BigDecimal price =
+                jo.getBigDecimal("trigger_price") != null
+                ? jo.getBigDecimal("trigger_price")
+                : jo.getBigDecimal("price");
         BigDecimal quantity = jo.getBigDecimal("volume");
         BigDecimal deal = null;
         State state = null;
 
-        return new Order(null, time, id, price, quantity, deal, side, type, state);
+        return new Order(jo.toJSONString(), time, id, price, quantity, deal, side, type, state);
     }
 
     /**
@@ -195,6 +273,58 @@ public class HuobiProFutUtil {
         return new Account(null, instrument,
                 new Balance(null, arg[0], lAvailable, lFrozen),
                 new Balance(null, arg[1], rAvailable, rFrozen));
+    }
+
+    /**
+     * 序列化歷史订单
+     *
+     * @param jo json格式的orders数据
+     * @return
+     */
+    public static List<Order> parseOrders(JSONObject jo) {
+        if (Objects.isNull(jo) ||
+                Objects.isNull(jo.getJSONObject("data"))) {
+            return null;
+        }
+
+        List<Order> orders = new ArrayList<>();
+        JSONArray data = jo.getJSONObject("data").getJSONArray("orders");
+        for (int i = 0; i < data.size(); i++) {
+            JSONObject json = data.getJSONObject(i);
+            Order order = parseOrder(json);
+            orders.add(order);
+        }
+        return orders;
+    }
+
+    /**
+     * 序列化成交明細
+     *
+     * @param jo json格式的trades数据
+     * @return
+     */
+    public static List<Trade> parseTrades(JSONObject jo) {
+        if (Objects.isNull(jo) ||
+                Objects.isNull(jo.getJSONObject("data"))) {
+            return null;
+        }
+
+        List<Trade> trades = new ArrayList<>();
+        JSONArray data = jo.getJSONObject("data").getJSONArray("trades");
+        for (int i = 0; i < data.size(); i++) {
+            JSONObject json = data.getJSONObject(i);
+            Long time = json.getDate("created_at").getTime();
+            String dealId = new StringBuilder(json.getString("id"))
+                    .append("/")
+                    .append(json.getString("trade_id")).toString();
+            BigDecimal fee = json.getBigDecimal("trade_fee");
+            String feeAsset = json.getString("fee_asset");
+            BigDecimal price = json.getBigDecimal("trade_price");
+            BigDecimal deal = json.getBigDecimal("trade_volume");
+            String orderId = jo.getJSONObject("data").getString("order_id_str");
+            trades.add(new Trade(jo.toJSONString(), time, orderId, dealId, price, deal, fee, feeAsset));
+        }
+        return trades;
     }
 
     /**

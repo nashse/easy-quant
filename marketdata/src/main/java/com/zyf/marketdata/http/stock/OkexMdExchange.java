@@ -88,7 +88,7 @@ public class OkexMdExchange implements IMdExchange {
     }
 
     @Override
-    public List<Kline> getKline(String symbol) {
+    public List<Kline> getKline(String symbol, String granularity) {
         return null;
     }
 

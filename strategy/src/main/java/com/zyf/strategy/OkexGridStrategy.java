@@ -2,10 +2,12 @@ package com.zyf.strategy;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zyf.common.model.Depth;
+import com.zyf.common.model.Kline;
 import com.zyf.common.model.Order;
 import com.zyf.common.model.Position;
 import com.zyf.common.model.enums.Side;
 import com.zyf.common.util.CommomUtil;
+import com.zyf.common.util.IndexUtil;
 import com.zyf.common.util.MathUtil;
 import com.zyf.common.util.RepeatUtil;
 import com.zyf.framework.boot.BaseStrategy;
@@ -13,10 +15,14 @@ import com.zyf.framework.scheduling.interfaces.ScheduledByZyf;
 import com.zyf.framework.service.impl.EmailServiceImpl;
 import com.zyf.framework.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.ta4j.core.BarSeries;
+import org.ta4j.core.indicators.DPOIndicator;
+import org.ta4j.core.num.Num;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.math.BigDecimal.*;
@@ -30,6 +36,7 @@ import static java.math.BigDecimal.*;
  * 概率：震荡行情概率大。
  * 等比：上涨盈利比亏损更多；下跌亏损比盈利更多。
  * 此策略在震荡上涨行情中，有优势。
+ * 针插式行情会浮亏比较大。
  *
  * @author yuanfeng.z
  * @date 2020/7/27 1:44
@@ -79,6 +86,11 @@ public class OkexGridStrategy extends BaseStrategy {
     private BigDecimal quantity = new BigDecimal("5");
 
     /**
+     * 是否运行
+     */
+    private Boolean bRun = false;
+
+    /**
      * 发邮件配置
      */
     private String host = "smtpdm.aliyun.com";
@@ -86,12 +98,13 @@ public class OkexGridStrategy extends BaseStrategy {
     private String user = "email@algotrade.cc";
     private String password = "ZHIDUOduo2020";
     private String toMail = "1004283115@qq.com";
-    private String mailTitle = "etwet";
-    private String mailContent = "fssd";
 
     @Override
     protected void init() {
         log.info("init");
+
+        log.info("执行过滤器");
+        filter();
 
         tradeE.setLeverage(symbol, leverage);
 
@@ -109,6 +122,10 @@ public class OkexGridStrategy extends BaseStrategy {
         lowPrice = midPrice.multiply(BigDecimal.ONE.subtract(new BigDecimal(gridNum.toString()).multiply(spreadRate)));
         higtPrice = midPrice.multiply(BigDecimal.ONE.add(new BigDecimal(gridNum.toString()).multiply(spreadRate)));
 
+        log.info("currGridPrice : {}", currGridPrice);
+        log.info("lowPrice : {}", lowPrice);
+        log.info("higtPrice : {}", higtPrice);
+
         CommomUtil.repeatOrderMarket(tradeE, "openLongMarket", "-1", 5,
                 symbol, quantity, -1);
         CommomUtil.repeatOrderMarket(tradeE, "openShortMarket", "-1", 5,
@@ -118,22 +135,40 @@ public class OkexGridStrategy extends BaseStrategy {
     @Override
     protected void recovery() {
         log.info("recovery");
+        bRun = true;
         String content = FileUtil.readJsonFile(storeFile);
         JSONObject json = JSONObject.parseObject(content);
         currGridPrice = json.getBigDecimal("currGridPrice");
         lowPrice = json.getBigDecimal("lowPrice");
         higtPrice = json.getBigDecimal("higtPrice");
+
+        log.info("currGridPrice : {}", currGridPrice);
+        log.info("lowPrice : {}", lowPrice);
+        log.info("higtPrice : {}", higtPrice);
     }
 
     @Override
     @ScheduledByZyf(cron = "*/1 * * * * ?")
     protected void run() {
-        Depth d = mdE.getDepth(symbol);
-        BigDecimal askPrice = d.getAsks().get(0).getPrice();
-        BigDecimal bidPrice = d.getBids().get(0).getPrice();
-        BigDecimal midPrice = askPrice.add(bidPrice).
-                divide(new BigDecimal("2")).
-                setScale(1, RoundingMode.DOWN);
+        if (!bRun) {
+            return;
+        }
+
+        Depth d = null;
+        BigDecimal askPrice = null;
+        BigDecimal bidPrice = null;
+        BigDecimal midPrice = null;
+        try {
+            d = mdE.getDepth(symbol);
+            askPrice = d.getAsks().get(0).getPrice();
+            bidPrice = d.getBids().get(0).getPrice();
+            midPrice = askPrice.add(bidPrice).
+                    divide(new BigDecimal("2")).
+                    setScale(1, RoundingMode.DOWN);
+        } catch (Exception e) {
+            log.error(e.toString());
+            return;
+        }
 
         try {
             // 行情下跌
@@ -144,6 +179,7 @@ public class OkexGridStrategy extends BaseStrategy {
 
                 // 小于最低价
                 if (askPrice.compareTo(lowPrice) == -1) {
+                    bRun = false;
                     StringBuilder sb = new StringBuilder();
                     sb.append("下跌行情，止损 --> askPrice：").
                             append(askPrice).
@@ -220,8 +256,9 @@ public class OkexGridStrategy extends BaseStrategy {
 
                 // 大于最高价
                 if (bidPrice.compareTo(higtPrice) == 1) {
+                    bRun = false;
                     StringBuilder sb = new StringBuilder();
-                    sb.append("下跌行情，止损 --> askPrice：").
+                    sb.append("行情上升，止损 --> askPrice：").
                             append(askPrice).
                             append(" lowPrice：").
                             append(lowPrice);
@@ -305,13 +342,14 @@ public class OkexGridStrategy extends BaseStrategy {
         log.info("新当前网格行情中间 --> currGridPrice：{}", currGridPrice);
     }
 
-    @ScheduledByZyf(cron = "* */1 * * * ?")
+    @ScheduledByZyf(cron = "0 */1 * * * ?")
     private void persistent() {
         JSONObject json = new JSONObject();
         json.put("currGridPrice", currGridPrice);
         json.put("lowPrice", lowPrice);
         json.put("higtPrice", higtPrice);
         FileUtil.writeJsonFile(storeFile, json.toJSONString());
+        log.info("持久化：{}", json.toJSONString());
     }
 
     /**
@@ -325,6 +363,7 @@ public class OkexGridStrategy extends BaseStrategy {
         Boolean b = tradeE.cancelOrders(symbol, ids);
         if (!b) {
             log.info("撤销委托单失败，order：{}", poList);
+            return;
         }
 
         // 撤销计划订单
@@ -334,6 +373,7 @@ public class OkexGridStrategy extends BaseStrategy {
         tradeE.triggerCancelOrders(symbol, ids);
         if (!b) {
             log.info("撤销计划订单，order：{}", tpoList);
+            return;
         }
     }
 
@@ -342,12 +382,15 @@ public class OkexGridStrategy extends BaseStrategy {
      */
     private void closePositions() {
         List<Position> positions = RepeatUtil.repeat(symbol, tradeE::getPositions, 5);
+        if (Objects.isNull(positions)) {
+            throw new RuntimeException("平仓失败，positions is null");
+        }
         for (Position p : positions) {
             if (Side.OPEN_LONG.equals(p.getSide())) {
                 CommomUtil.repeatOrderMarket(tradeE, "closeLongMarket", -1, 5,
                         symbol, p.getAvailQuantity(), -1);
             } else if (Side.OPEN_SHORT.equals(p.getSide())) {
-                CommomUtil.repeatOrderMarket(tradeE, "closeSellMarket", -1, 5,
+                CommomUtil.repeatOrderMarket(tradeE, "closeShortMarket", -1, 5,
                         symbol, p.getAvailQuantity(), -1);
             }
         }
@@ -367,4 +410,48 @@ public class OkexGridStrategy extends BaseStrategy {
         emailContent.append("币对：").append(symbol);
         EmailServiceImpl.sendMail(host, user, password, fromMail, toMail, title, content);
     }
+
+    /**
+     * 过滤器
+     *
+     * @return
+     */
+    private Boolean filter() {
+        while (!bRun) {
+            try {
+                bRun = dpoFilter();
+            } catch (Exception e) {
+                log.error(e.toString());
+            }
+            CommomUtil.sleep(1000L);
+        }
+        return false;
+    }
+
+    /**
+     * dpo指标过滤器,
+     * 15min,
+     * 过滤大涨跌行情，避免在这过程中开仓,
+     * @return true为震荡行情
+     */
+    private Boolean dpoFilter() {
+        final String granularity = "900";
+        final int max = 21;
+        List<Kline> klines = mdE.getKline(symbol, granularity);
+        klines = klines.subList(0, max);
+        BarSeries barSeries = IndexUtil.toBarSeriesSame(klines, granularity);
+
+        DPOIndicator dpoIndicator = new DPOIndicator(barSeries, max);
+        log.info("dpo指标值 : " + dpoIndicator.getValue(max - 1));
+        Num num = dpoIndicator.getValue(max - 1);
+
+        Double minNum = -10.0;
+        Double maxNum = 10.0;
+        Boolean rtn = false;
+        if (num.doubleValue() >= minNum && num.doubleValue() <= maxNum) {
+            rtn = true;
+        }
+        return rtn;
+    }
+
 }

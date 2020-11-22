@@ -440,7 +440,7 @@ public class HuobiProTradeExchange implements ITradeExchange {
      * @return
      */
     @Override
-    public List<Trade> getTrade(String symbol, String orderId) {
+    public List<Trade> getTrades(String symbol, String orderId) {
 
         // 转换币对格式
         symbol = HuobiProUtil.transfSymbol(symbol);
@@ -519,12 +519,22 @@ public class HuobiProTradeExchange implements ITradeExchange {
     }
 
     @Override
-    public String triggerCloseBuy(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
+    public String triggerCloseLong(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
         return null;
     }
 
     @Override
-    public String triggerCloseSell(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
+    public String trackingCloseShort(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
+    @Override
+    public String trackingCloseLong(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
+    @Override
+    public String triggerCloseShort(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
         return null;
     }
 

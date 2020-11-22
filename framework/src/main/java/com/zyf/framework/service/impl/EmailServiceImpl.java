@@ -77,11 +77,11 @@ public class EmailServiceImpl implements IEmailService {
     }
 
     public static void main(String[] args) {
-        String host = "smtpdm.aliyun.com";
-        String fromMail = "email@algotrade.cc";
-        String user = "email@algotrade.cc";
-        String password = "ZHIDUOduo2020";
-        String toMail = "1004283115@qq.com";
+        String host = "smtpdm.xxx.com";
+        String fromMail = "email@xxx.cc";
+        String user = "email@xxx.cc";
+        String password = "xxxx";
+        String toMail = "xxxx@qq.com";
         String mailTitle = "etwet";
         String mailContent = "fssd";
         try {

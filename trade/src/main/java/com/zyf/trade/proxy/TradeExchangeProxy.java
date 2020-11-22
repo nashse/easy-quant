@@ -164,7 +164,7 @@ public class TradeExchangeProxy {
      * @return
      */
     public List<Trade> getTrade(String symbol, String orderId) {
-        List<Trade> trades = this.tradeExchange.getTrade(symbol, orderId);
+        List<Trade> trades = this.tradeExchange.getTrades(symbol, orderId);
         return trades;
     }
 

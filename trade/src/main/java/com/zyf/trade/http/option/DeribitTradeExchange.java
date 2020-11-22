@@ -1,4 +1,4 @@
-package com.zyf.trade.http.stock;
+package com.zyf.trade.http.option;
 
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
@@ -10,7 +10,6 @@ import com.zyf.common.model.*;
 import com.zyf.common.model.enums.Side;
 import com.zyf.common.model.http.HttpParameter;
 import com.zyf.common.okhttp.OkHttpV3ClientProxy;
-import javafx.geometry.Pos;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
@@ -19,7 +18,7 @@ import java.util.*;
 
 /**
  * Deribit现货交易实现类
- *
+ * https://docs.deribit.com/#deribit-api-v2-0-1
  * @author yuanfeng.z
  * @date 2019/10/5 11:51
  */
@@ -32,7 +31,7 @@ public class DeribitTradeExchange implements ITradeExchange {
     /**
      * 网站
      */
-    public static final String SITE = "test.deribit.com";
+    public static final String SITE = "www.deribit.com";
     /**
      * URL
      */
@@ -336,7 +335,7 @@ public class DeribitTradeExchange implements ITradeExchange {
     }
 
     @Override
-    public List<Trade> getTrade(String symbol, String orderId) {
+    public List<Trade> getTrades(String symbol, String orderId) {
         return null;
     }
 
@@ -469,12 +468,22 @@ public class DeribitTradeExchange implements ITradeExchange {
     }
 
     @Override
-    public String triggerCloseBuy(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
+    public String triggerCloseLong(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
         return null;
     }
 
     @Override
-    public String triggerCloseSell(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
+    public String trackingCloseShort(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
+    @Override
+    public String trackingCloseLong(String instrument, BigDecimal triggerPrice, BigDecimal quantity, BigDecimal callbackRate) {
+        return null;
+    }
+
+    @Override
+    public String triggerCloseShort(String instrument, BigDecimal triggerPrice, BigDecimal quantity, Integer leverRate) {
         return null;
     }
 
@@ -499,7 +508,7 @@ public class DeribitTradeExchange implements ITradeExchange {
     }
 
     public static void main(String[] args) {
-        DeribitTradeExchange derbit = new DeribitTradeExchange("L7zRRRbJ", "xNLeUgj9o_Pu_Fp8ioQLBX-sqQxSeUZQiw5STJCw27Y");
+        DeribitTradeExchange derbit = new DeribitTradeExchange("xxx", "xxx-xxx");
         derbit.buyLimit("BTC-PERPETUAL", new BigDecimal("9400"), new BigDecimal("10"));
 //        derbit.sellLimit("BTC-PERPETUAL",new BigDecimal("9500"),new BigDecimal("10"));
     }

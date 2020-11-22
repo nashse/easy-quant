@@ -52,6 +52,6 @@
             </plugin>
         </plugins>
         <!--包名-->
-        <finalName>OkexGridStrategy-${jar.version}</finalName>
+        <finalName>DpoStrategyReverse-${jar.version}</finalName>
     </build>
 </project>

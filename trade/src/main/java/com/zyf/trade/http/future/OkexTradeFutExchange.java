@@ -1,7 +1,6 @@
 package com.zyf.trade.http.future;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zyf.baseservice.ITradeExchange;
 import com.zyf.baseservice.util.okex.OkexFutUtil;
@@ -10,13 +9,9 @@ import com.zyf.baseservice.util.okex.OkexUtil;
 import com.zyf.common.model.*;
 import com.zyf.common.model.enums.HttpMethod;
 import com.zyf.common.model.enums.Side;
-import com.zyf.common.model.enums.Type;
 import com.zyf.common.okhttp.OkHttpV3ClientProxy;
-import javafx.geometry.Pos;
-import netscape.javascript.JSObject;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,19 +80,19 @@ public class OkexTradeFutExchange implements ITradeExchange {
     private static final String BATCH_ORDERS = "/api/swap/v3/cancel_batch_orders/<instrument_id>";
 
     /**
-     * 止盈止损下单
+     * 委托下单
      */
-    private static final String TRIGGER_ORDER = "/api/swap/v3/order_algo";
+    private static final String ENTRUST_ORDER = "/api/swap/v3/order_algo";
 
     /**
-     * 止盈止损下单
+     * 委托订单撤单
      */
-    private static final String TRIGGER_CANCEL_ALL = "/api/swap/v3/cancel_algos";
+    private static final String ENTRUST_CANCEL_ALL = "/api/swap/v3/cancel_algos";
 
     /**
-     * 获取止盈止损订单
+     * 获取委托订单订单
      */
-    private static final String GET_TRIGGER_ALL_ORDERS = "/api/swap/v3/order_algo/<instrument_id>";
+    private static final String GET_ENTRUST_ALL_ORDERS = "/api/swap/v3/order_algo/<instrument_id>";
 
     /**
      * 设置杠杆
@@ -113,6 +108,11 @@ public class OkexTradeFutExchange implements ITradeExchange {
      * 获取订单信息
      */
     private static final String GET_ORDER = "/api/swap/v3/orders/<instrument_id>/<order_id>";
+
+    /**
+     * 获取成交明细
+     */
+    private static final String GET_TRADERS = "/api/swap/v3/fills";
 
     /**
      * 公钥
@@ -266,8 +266,15 @@ public class OkexTradeFutExchange implements ITradeExchange {
     }
 
     @Override
-    public List<Trade> getTrade(String symbol, String orderId) {
-        return null;
+    public List<Trade> getTrades(String symbol, String orderId) {
+        String param = "?instrument_id=" + symbol + "&order_id=" + orderId;
+
+        LinkedHashMap linkedHashMap = OkexSignUtil.sign(HttpMethod.GET.getValue(),
+                URL, null, GET_TRADERS + param, this.accessKey, this.secretKey, passphrase);
+        String url = URL + GET_TRADERS + param;
+        String json = OkHttpV3ClientProxy.getHeader(url, linkedHashMap);
+
+        return OkexFutUtil.parseTrades(JSONObject.parseArray(json));
     }
 
     @Override
@@ -360,10 +367,6 @@ public class OkexTradeFutExchange implements ITradeExchange {
 
         String json = OkHttpV3ClientProxy.postHeader(url, linkedHashMap, OkexUtil.addParams(paramMap));
 
-        if ("33014".equals(JSONObject.parseObject(json).getString("code"))) {
-            return "订单不存在";
-        }
-
         JSONObject j = JSONObject.parseObject(json);
         return j.getString("order_id");
     }
@@ -391,24 +394,40 @@ public class OkexTradeFutExchange implements ITradeExchange {
     }
 
     @Override
-    public String triggerCloseBuy(String instrument,
-                                  BigDecimal triggerPrice,
-                                  BigDecimal quantity,
-                                  Integer leverRate) {
+    public String triggerCloseLong(String instrument,
+                                   BigDecimal triggerPrice,
+                                   BigDecimal quantity,
+                                   Integer leverRate) {
         return this.triggerOrder(instrument, triggerPrice, triggerPrice, quantity, 3, 2, leverRate);
     }
 
     @Override
-    public String triggerCloseSell(String instrument,
-                                   BigDecimal triggerPrice,
-                                   BigDecimal quantity,
-                                   Integer leverRate) {
+    public String trackingCloseShort(String instrument,
+                                     BigDecimal triggerPrice,
+                                     BigDecimal quantity,
+                                     BigDecimal callbackRate) {
+        return this.trackingOrder(instrument, triggerPrice, quantity, callbackRate, 4);
+    }
+
+    @Override
+    public String trackingCloseLong(String instrument,
+                                    BigDecimal triggerPrice,
+                                    BigDecimal quantity,
+                                    BigDecimal callbackRate) {
+        return this.trackingOrder(instrument, triggerPrice, quantity, callbackRate, 3);
+    }
+
+    @Override
+    public String triggerCloseShort(String instrument,
+                                    BigDecimal triggerPrice,
+                                    BigDecimal quantity,
+                                    Integer leverRate) {
         return this.triggerOrder(instrument, triggerPrice, triggerPrice, quantity, 4, 2, leverRate);
     }
 
     @Override
     public List<Order> getTriggerPendingOrders(String instrument) {
-        final String triggerAllOrders = GET_TRIGGER_ALL_ORDERS.replace("<instrument_id>", instrument);
+        final String triggerAllOrders = GET_ENTRUST_ALL_ORDERS.replace("<instrument_id>", instrument);
 
         /*下单*/
         final String state = "1";
@@ -437,8 +456,8 @@ public class OkexTradeFutExchange implements ITradeExchange {
         paramMap.put("order_type", "1");
 
         LinkedHashMap linkedHashMap = OkexSignUtil.sign(HttpMethod.POST.getValue(),
-                URL, paramMap, TRIGGER_CANCEL_ALL, this.accessKey, this.secretKey, passphrase);
-        String url = URL + TRIGGER_CANCEL_ALL;
+                URL, paramMap, ENTRUST_CANCEL_ALL, this.accessKey, this.secretKey, passphrase);
+        String url = URL + ENTRUST_CANCEL_ALL;
         String json = OkHttpV3ClientProxy.postHeader(url, linkedHashMap, OkexFutUtil.addParams(paramMap));
         JSONObject j = JSONObject.parseObject(json);
 
@@ -518,13 +537,51 @@ public class OkexTradeFutExchange implements ITradeExchange {
         }
 
         LinkedHashMap linkedHashMap = OkexSignUtil.sign(HttpMethod.POST.getValue(),
-                URL, paramMap, TRIGGER_ORDER, this.accessKey, this.secretKey, passphrase);
-        String url = URL + TRIGGER_ORDER;
+                URL, paramMap, ENTRUST_ORDER, this.accessKey, this.secretKey, passphrase);
+        String url = URL + ENTRUST_ORDER;
         String json = OkHttpV3ClientProxy.postHeader(url, linkedHashMap, OkexUtil.addParams(paramMap));
 
-        if ("33014".equals(JSONObject.parseObject(json).getString("code"))) {
-            return "订单不存在";
-        }
+        JSONObject j = JSONObject.parseObject(json);
+
+        return OkexFutUtil.parseTriggerOrder(j);
+    }
+
+    /**
+     * 跟踪下单
+     * @param instrument 合约名
+     * @param triggerPrice 激活价格 ，填写值0\<X\<=100000
+     * @param quantity 数量
+     * @param callbackRate 	回调幅度，填写值0.001（0.1%）\<=X\<=0.05（5%）
+     * @param type 类型
+     * @return
+     */
+    public String trackingOrder(String instrument,
+                               BigDecimal triggerPrice,
+                               BigDecimal quantity,
+                               BigDecimal callbackRate,
+                               Integer type) {
+        /*下单*/
+        LinkedHashMap<String, Object> paramMap = new LinkedHashMap<>();
+        /**
+         * type可填参数：
+         * 1:开多
+         * 2:开空
+         * 3:平多
+         * 4:平空
+         */
+        paramMap.put("type", type);
+        paramMap.put("instrument_id", instrument);
+        paramMap.put("order_type", "2");
+        paramMap.put("trigger_price", triggerPrice);
+        paramMap.put("callback_rate", callbackRate);
+        paramMap.put("type", type);
+        paramMap.put("size", quantity);
+
+        LinkedHashMap linkedHashMap = OkexSignUtil.sign(HttpMethod.POST.getValue(),
+                URL, paramMap, ENTRUST_ORDER, this.accessKey, this.secretKey, passphrase);
+        String url = URL + ENTRUST_ORDER;
+        String json = OkHttpV3ClientProxy.postHeader(url, linkedHashMap, OkexUtil.addParams(paramMap));
+
         JSONObject j = JSONObject.parseObject(json);
 
         return OkexFutUtil.parseTriggerOrder(j);
