@@ -16,12 +16,12 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>io.broker.api</groupId>
-            <artifactId>bhex</artifactId>
-            <version>3.0.0</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.broker.api</groupId>-->
+<!--            <artifactId>bhex</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>commons-httpclient</groupId>
