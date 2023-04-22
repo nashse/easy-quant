@@ -6,7 +6,7 @@
       "symbol" : "BTC-PERPETUAL",
       "mdE" : { "exchangeName" : "deribit" },
       "tradeE" : { "exchangeName" : "deribit", "accessKey" : "accessKey/12312", "secretKey" : "secretKey" },
-      "huobiproE" : { "exchangeName" : "huobipro" },
+      "huobiproE" : { "exchangeName" : "huobipro" }
     }
   ]
 }

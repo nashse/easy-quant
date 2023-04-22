@@ -6,15 +6,15 @@
       "symbol" : "MNBTC-USDT-SWAP",
       "mdE" : { "exchangeName" : "okexv3", "securitiesType" : "future" },
       "tradeE" : { "exchangeName" : "okexv3", "securitiesType" : "future",
-      "accessKey" : "014e849a-0c99-40d6-988b-30bfeb13fdf2/source19920207", "secretKey" : "B525A056BA017ABCF18BECEE19C20167" },
+      "accessKey" : "xxx-xxx-xxx-xxx-xxx/xxxxx", "secretKey" : "xxx" },
       "profit" : "12",
       "bInit" : 0,
       "storeFile" : "store.json",
-      "host" : "smtpdm.aliyun.com",
-      "fromMail" : "email@algotrade.cc",
-      "user" : "email@algotrade.cc",
-      "password" : "ZHIDUOduo2020",
-      "toMail" : "1004283115@qq.com"
+      "host" : "xxx",
+      "fromMail" : "xxx",
+      "user" : "xxx",
+      "password" : "xxx",
+      "toMail" : "xxx"
     }
   ]
 }
